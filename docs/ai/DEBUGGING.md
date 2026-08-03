@@ -74,3 +74,14 @@ function global:rg { & $ripgrep @args }
 - Resolution: use Vite's `isPreview` configuration flag so builds and production previews share `/AI-Synthesis/`, while the development server remains at `/`.
 - Regression protection: `pnpm test:e2e:deployment` loads the built app from `/AI-Synthesis/`, verifies rendered cards and prefixed assets, and fetches the packaged workbook.
 - Related knowledge: `docs/ai/ARCHITECTURE.md`, `docs/ai/MAINTENANCE.md`, and `docs/ai/REFERENCES.md` own the deployment contract and commands.
+
+### 2026-08-03 - GitHub Actions must select a pnpm version
+
+- Status: resolved
+- Scope: GitHub Pages CI dependency setup
+- Symptom: the Pages workflow stopped at `pnpm/action-setup` before Node setup, installation, or build ran.
+- Root cause: the repository did not declare `packageManager`, and the action step did not provide its required `version` input.
+- Decisive evidence: the public Actions job marked only `Set up pnpm` as failed and skipped every subsequent step.
+- Resolution: pin pnpm 10 in `.github/workflows/deploy-pages.yml`; it supports the committed lockfile version 9 format.
+- Regression protection: the deployment workflow now owns an explicit pnpm version instead of depending on a developer machine's global installation.
+- Related knowledge: `docs/ai/REFERENCES.md` owns the deployment workflow location.
