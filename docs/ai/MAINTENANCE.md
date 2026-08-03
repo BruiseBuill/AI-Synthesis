@@ -72,6 +72,7 @@ Every debugging task must follow `docs/ai/DEBUGGING.md`. Before handoff, add or 
 - `pnpm test:score`: material-score scenarios only.
 - `pnpm test:core`: all core Vitest files.
 - `pnpm test:e2e:score`: score-related browser workflows only.
+- `pnpm card-data:generate`: regenerate `src/data/cardData.generated.json` from `CardData.xlsm` with the shared importer; `dev`, `test`, and `build` invoke it automatically.
 - `pnpm verify:core`: Level 2 core suite plus production build.
 - `pnpm verify:all`: Level 3 full unit, build, and E2E gate.
 
@@ -79,7 +80,7 @@ Every debugging task must follow `docs/ai/DEBUGGING.md`. Before handoff, add or 
 
 - `effect` text remains display/authoring metadata, but the complete bundled catalog is compiled through the typed legacy registry. `SynthesisSummary.checkpoints` records a real queue, and score/color/acquisition/explosion/retention effects execute through it.
 - The current `CardData.xlsm` contains VBA and no `EffectCode` column, so the importer retains a centralized legacy statue mapping. Migrate the authoring contract only with a VBA-preserving workflow.
-- No in-repo generator converts `CardData.xlsm` to `cardData.generated.json`; synchronization is still an explicit update, but `cardDataWorkbook.test.ts` now fails on any field, definition-total, or card-total drift.
+- The generator writes `cardData.generated.json` before development, unit tests, and builds. A malformed workbook therefore fails before the application starts or ships; `cardDataWorkbook.test.ts` additionally catches authored field, definition-total, and card-total drift.
 - GitHub Pages deployment is tied to the repository path `/AI-Synthesis/`; renaming the repository requires updating `vite.config.ts` and the deployment smoke test together.
 - Additional acquisition methods are an exact four-text registry. A new authoring phrase must add a typed mapping and rule tests; unsupported text is rejected during import instead of becoming display-only behavior.
 - Whole-game IndexedDB save/resume/replay described in `Construction.txt` is absent; only imported catalog persists.
@@ -89,6 +90,5 @@ Every debugging task must follow `docs/ai/DEBUGGING.md`. Before handoff, add or 
 
 ## Preferred Next Construction Order
 
-1. Add workbook-to-JSON generation while preserving VBA; total/schema drift checks are already covered by Vitest.
-2. Complete whole-game persistence/replay.
-3. Remove or activate legacy stage state through one canonical path.
+1. Complete whole-game persistence/replay.
+2. Remove or activate legacy stage state through one canonical path.

@@ -69,15 +69,15 @@ Not implemented: whole-game save/resume/replay and animations. Prototype deck co
 
 ## Catalog Flow
 
-Bundled startup: JSON import -> `TreasureCatalogSchema.parse` -> `defaultTreasureDefinitions` -> `createGame`.
+Bundled startup: `CardData.xlsm` -> `pnpm card-data:generate` -> generated JSON import -> `TreasureCatalogSchema.parse` -> `defaultTreasureDefinitions` -> `createGame`. The generator runs automatically before development, unit tests, and production builds, and uses the same row parser as browser imports.
 
-Runtime import: `.xlsm/.xlsx` ArrayBuffer -> scan sheets -> locate required headers in first 10 rows -> map rows -> Zod -> IndexedDB database `synthesis-solo`, store `card-data`, key `active-catalog` -> recreate game with current seed. App startup hydrates this snapshot asynchronously.
+Runtime import: `.xlsm/.xlsx` ArrayBuffer -> scan sheets -> locate required headers in first 10 rows -> map rows -> Zod -> IndexedDB database `synthesis-solo`, store `card-data`, key `active-catalog` -> recreate game with current seed. App startup hydrates this snapshot asynchronously. User-selected workbooks persist as explicit overrides. A reload of the bundled `CardData.xlsm` records the built-in catalog version it replaced; startup deletes that snapshot after a deployment changes the built-in version. Legacy snapshots named exactly `CardData.xlsm` are also discarded once so they cannot permanently mask updated authoring data.
 
 Production packaging: Vite builds with the GitHub Pages base path `/AI-Synthesis/` and emits the root authoring workbook as `dist/CardData.xlsm`. `reloadBundledCardData` resolves the workbook through `import.meta.env.BASE_URL`, so the same browser flow works on GitHub Pages.
 
 The optional workbook column `AdditionalAquireMethod` (authoring spelling) maps the four supported Chinese descriptions to `additionalAcquireMethod` for display and `additionalAcquireColor` for execution. `resolveTreasure` evaluates that typed color against every material's post-Priority-0 effective colors; no React component parses or executes the text.
 
-`src/data/cardDataWorkbook.test.ts` reads `CardData.xlsm` directly and compares all runtime fields with the bundled JSON, excluding the machine-only statue `effectCode`. It also reconciles 63 definitions and 80 physical cards.
+`src/data/cardDataWorkbook.test.ts` reads `CardData.xlsm` directly and compares all authored runtime fields with the generated JSON, excluding the machine-only statue `effectCode`. It also reconciles 63 definitions and 80 physical cards. The shared parser supplies the centralized legacy statue effect code when the workbook has no `EffectCode` column.
 
 Settings difficulty statistics group definitions by printed difficulty, weight each definition by `quantity`, and display rounded cumulative percentages over the active catalog.
 

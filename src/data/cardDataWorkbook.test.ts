@@ -5,7 +5,7 @@ import { defaultTreasureDefinitions, type TreasureDefinition } from "./cardData"
 import { parseCardDataRows } from "./cardDataImport";
 
 function withoutMachineOnlyFields(definitions: readonly TreasureDefinition[]) {
-  return definitions.map(({ effectCode: _effectCode, ...definition }) => definition);
+  return definitions.map(({ effectCode: _effectCode, ...definition }) => JSON.parse(JSON.stringify(definition)));
 }
 
 describe("bundled CardData workbook alignment", () => {

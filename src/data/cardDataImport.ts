@@ -1,4 +1,10 @@
-import { TreasureCatalogSchema, type CardColor, type MaterialColor, type TreasureDefinition } from "./cardData";
+import {
+  TreasureCatalogSchema,
+  type CardColor,
+  type EffectCode,
+  type MaterialColor,
+  type TreasureDefinition,
+} from "./cardData";
 
 type SpreadsheetCell = string | number | boolean | Date | null | undefined;
 
@@ -18,6 +24,9 @@ const additionalAcquireColors: Readonly<Record<string, MaterialColor>> = {
   所有的卡都为蓝色: "B",
   所有的卡都为黄色: "Y",
   所有的卡都为红色: "R",
+};
+const legacyEffectCodes: Readonly<Record<string, EffectCode>> = {
+  雕像: "material-limit",
 };
 
 function asText(value: SpreadsheetCell, field: string, rowNumber: number): string {
@@ -78,7 +87,7 @@ export function parseCardDataRows(rows: SpreadsheetCell[][]): TreasureDefinition
         : String(row[column("类别")]).trim(),
       effect: asText(row[column("效果")], "效果", rowNumber),
       effectCode: column("EffectCode") < 0 || row[column("EffectCode")] == null || row[column("EffectCode")] === ""
-        ? undefined
+        ? legacyEffectCodes[name]
         : String(row[column("EffectCode")]).trim(),
       additionalAcquireMethod,
       additionalAcquireColor,

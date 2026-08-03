@@ -8,7 +8,10 @@ import {
 
 describe("effect compilation", () => {
   it("assigns a typed spec to every bundled physical treasure card", () => {
-    expect(buildTreasureDeck().every((card) => card.effectSpecs.length > 0)).toBe(true);
+    expect(buildTreasureDeck()
+      .filter((card) => card.effectSpecs.length === 0)
+      .map((card) => ({ name: card.name, color: card.color, effect: card.effect })))
+      .toEqual([]);
   });
 
   it("compiles both explicit and legacy statue definitions without reading effect text", () => {

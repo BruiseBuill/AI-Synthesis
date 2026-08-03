@@ -6,11 +6,10 @@ const DATABASE_VERSION = 1;
 const STORE_NAME = "card-data";
 const ACTIVE_CATALOG_KEY = "active-catalog";
 
-export interface CardDataSource {
-  type: "built-in" | "imported";
-  fileName: string;
-  importedAt: string | null;
-}
+export type CardDataSource =
+  | { type: "built-in"; fileName: string; importedAt: null }
+  | { type: "bundled"; fileName: string; importedAt: string; builtInVersion: string }
+  | { type: "imported"; fileName: string; importedAt: string };
 
 export interface CardDataSnapshot {
   definitions: TreasureDefinition[];
@@ -19,12 +18,25 @@ export interface CardDataSnapshot {
 
 const CardDataSnapshotSchema = z.object({
   definitions: TreasureCatalogSchema,
-  source: z.object({
-    type: z.literal("imported"),
-    fileName: z.string().min(1),
-    importedAt: z.string().datetime(),
-  }),
+  source: z.discriminatedUnion("type", [
+    z.object({
+      type: z.literal("bundled"),
+      fileName: z.string().min(1),
+      importedAt: z.string().datetime(),
+      builtInVersion: z.string().min(1),
+    }),
+    z.object({
+      type: z.literal("imported"),
+      fileName: z.string().min(1),
+      importedAt: z.string().datetime(),
+    }),
+  ]),
 });
+
+export function isSnapshotCurrent(snapshot: CardDataSnapshot, builtInVersion: string): boolean {
+  if (snapshot.source.type === "bundled") return snapshot.source.builtInVersion === builtInVersion;
+  return snapshot.source.fileName.toLowerCase() !== "carddata.xlsm";
+}
 
 function openDatabase(): Promise<IDBDatabase> {
   return new Promise((resolve, reject) => {

@@ -609,17 +609,17 @@ describe("catalog score, color, safety, and retention effects", () => {
   });
 
   it("keeps additive score effects when later multipliers and selectors execute", () => {
-    const crown = buildTreasureDeck().find((card) => card.name === "王冠" && card.kind === "treasure")!;
+    const necklace = buildTreasureDeck().find((card) => card.name === "项链" && card.kind === "treasure")!;
     const apple = buildTreasureDeck().find((card) => card.name === "金苹果")!;
     const bell = buildTreasureDeck().find((card) => card.name === "铃铛" && card.color === "B")!;
     const whiteBase = buildBasicDeck().find((card) => card.color === "W" && card.synthesisScore === 1)!;
-    const completed = startWith([crown, apple, bell, whiteBase]);
+    const completed = startWith([necklace, apple, bell, whiteBase]);
     expect(completed.synthesis?.score).toBe(18);
 
-    const crownOnly = buildTreasureDeck().find((card) => card.name === "王冠" && card.kind === "treasure")!;
-    const target = { ...buildTreasureDeck().find((card) => card.kind === "treasure")!, id: "crown-target", difficulty: 6 };
-    const crownedReveal = startWith([crownOnly, ...buildBasicDeck().slice(0, 3)], [target]);
-    expect(crownedReveal.synthesis?.gained.map((card) => card.id)).toContain("crown-target");
+    const necklaceOnly = buildTreasureDeck().find((card) => card.name === "项链" && card.kind === "treasure")!;
+    const target = { ...buildTreasureDeck().find((card) => card.kind === "treasure")!, id: "necklace-target", difficulty: 6 };
+    const doubledReveal = startWith([necklaceOnly, ...buildBasicDeck().slice(0, 3)], [target]);
+    expect(doubledReveal.synthesis?.gained.map((card) => card.id)).toContain("necklace-target");
   });
 
   it("prevents treasure loss on the first explosion with incense", () => {

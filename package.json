@@ -4,9 +4,13 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
+    "card-data:generate": "node scripts/generate-card-data.mjs",
+    "predev": "pnpm card-data:generate",
     "dev": "vite",
     "preview": "vite preview",
+    "prebuild": "pnpm card-data:generate",
     "build": "tsc -b && vite build",
+    "pretest": "pnpm card-data:generate",
     "test": "vitest run",
     "test:core": "vitest run src/game-core",
     "test:score": "vitest run src/game-core/score-test-kit.test.ts",

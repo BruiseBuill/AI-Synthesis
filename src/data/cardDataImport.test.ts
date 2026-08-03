@@ -4,6 +4,15 @@ import { parseCardDataRows } from "./cardDataImport";
 const headers = ["代号", "颜色", "Priority", "类别", "效果", "数量", "卡面分值", "最终难度"];
 
 describe("CardData row import", () => {
+  it("retains the legacy machine effect for statue rows without an EffectCode column", () => {
+    const [definition] = parseCardDataRows([
+      ["代号", "颜色", "数量", "卡面分值", "效果", "最终难度", "Priority", "类别"],
+      ["雕像", "Y", 2, 2, "合成时可以额外增加一张牌", 4, -5, "其他效果"],
+    ]);
+
+    expect(definition.effectCode).toBe("material-limit");
+  });
+
   it("maps effects and keeps empty priorities as null", () => {
     const [definition] = parseCardDataRows([
       headers,

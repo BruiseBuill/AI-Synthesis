@@ -1,8 +1,14 @@
 import { create } from "zustand";
-import { countCards, defaultTreasureDefinitions, type TreasureDefinition } from "../data/cardData";
+import {
+  builtInCatalogVersion,
+  countCards,
+  defaultTreasureDefinitions,
+  type TreasureDefinition,
+} from "../data/cardData";
 import { parseCardDataWorkbook } from "../data/cardDataImport";
 import {
   clearCardDataSnapshot,
+  isSnapshotCurrent,
   loadCardDataSnapshot,
   saveCardDataSnapshot,
   type CardDataSource,
@@ -58,12 +64,10 @@ const browserRandom: RandomSource = () => {
 
 const initialSeed = createRandomSeed(browserRandom);
 
-async function persistImport(definitions: TreasureDefinition[], fileName: string): Promise<CardDataSource> {
-  const source: CardDataSource = {
-    type: "imported",
-    fileName,
-    importedAt: new Date().toISOString(),
-  };
+async function persistImport(
+  definitions: TreasureDefinition[],
+  source: Exclude<CardDataSource, { type: "built-in" }>,
+): Promise<CardDataSource> {
   await saveCardDataSnapshot({ definitions, source });
   return source;
 }
@@ -89,6 +93,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
     try {
       const snapshot = await loadCardDataSnapshot();
       if (!snapshot) return;
+      if (!isSnapshotCurrent(snapshot, builtInCatalogVersion)) {
+        await clearCardDataSnapshot();
+        return;
+      }
       set((state) => ({
         ...createGame(state.seed, snapshot.definitions),
         cardDefinitions: snapshot.definitions,
@@ -106,7 +114,12 @@ export const useGameStore = create<GameStore>((set, get) => ({
       const response = await fetch(`${import.meta.env.BASE_URL}CardData.xlsm?reload=${Date.now()}`, { cache: "no-store" });
       if (!response.ok) throw new Error("项目中未找到 CardData.xlsm，请使用“选择 Excel 文件”导入");
       const definitions = await parseCardDataWorkbook(await response.arrayBuffer());
-      const source = await persistImport(definitions, "CardData.xlsm");
+      const source = await persistImport(definitions, {
+        type: "bundled",
+        fileName: "CardData.xlsm",
+        importedAt: new Date().toISOString(),
+        builtInVersion: builtInCatalogVersion,
+      });
       set((state) => ({
         ...createGame(state.seed, definitions),
         cardDefinitions: definitions,
@@ -122,7 +135,11 @@ export const useGameStore = create<GameStore>((set, get) => ({
     set({ cardDataStatus: "loading", cardDataMessage: `正在读取 ${file.name}…` });
     try {
       const definitions = await parseCardDataWorkbook(await file.arrayBuffer());
-      const source = await persistImport(definitions, file.name);
+      const source = await persistImport(definitions, {
+        type: "imported",
+        fileName: file.name,
+        importedAt: new Date().toISOString(),
+      });
       set((state) => ({
         ...createGame(state.seed, definitions),
         cardDefinitions: definitions,

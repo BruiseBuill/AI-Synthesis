@@ -95,6 +95,7 @@ function legacyEffectCodes(name: string, context: CompileContext = {}): CardEffe
     case "黄宝石":
     case "红宝石":
     case "印玺":
+    case "王冠":
     case "金玫瑰":
     case "金杯": return [{ type: "none" }];
     case "戒指": return [{ type: "modify-score", operation: { type: "add", selector: { type: "all-basic" }, amount: 1 } }];
@@ -107,7 +108,7 @@ function legacyEffectCodes(name: string, context: CompileContext = {}): CardEffe
       ? [{ type: "modify-score", operation: { type: "double-highest-printed-score", color: colorBySeal[context.color] } }]
       : [];
     case "金苹果": return [{ type: "modify-score", operation: { type: "add-per-color", amount: 1 } }];
-    case "王冠": return context.effect === "最终的总分翻倍"
+    case "项链": return context.effect === "最终的总分翻倍"
       ? [{ type: "modify-score", operation: { type: "multiply-total", factor: 2 } }]
       : [{ type: "none" }];
     case "青铜钟": return [{ type: "modify-score", operation: { type: "add", selector: { type: "printed-score-at-most", threshold: context.color === "B" ? 1 : 2 }, amount: 1 } }];

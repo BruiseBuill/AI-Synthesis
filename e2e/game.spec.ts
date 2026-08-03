@@ -306,6 +306,41 @@ test("settings reloads CardData and restores it from IndexedDB", async ({ page }
   await expect(page.getByRole("dialog", { name: "设置" }).getByText("CardData.xlsm", { exact: true })).toBeVisible();
 });
 
+test("startup discards a bundled CardData snapshot from an older built-in catalog", async ({ page }) => {
+  await page.goto("/");
+  await page.evaluate(async () => {
+    const definitions = structuredClone(window.__SYNTHESIS_SOLO_STORE__!.getState().cardDefinitions);
+    definitions[0].name = "过期缓存卡牌";
+    const database = await new Promise<IDBDatabase>((resolve, reject) => {
+      const request = indexedDB.open("synthesis-solo", 1);
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () => reject(request.error);
+    });
+    await new Promise<void>((resolve, reject) => {
+      const transaction = database.transaction("card-data", "readwrite");
+      transaction.objectStore("card-data").put({
+        definitions,
+        source: {
+          type: "bundled",
+          fileName: "CardData.xlsm",
+          importedAt: "2026-08-03T00:00:00.000Z",
+          builtInVersion: "stale-catalog-version",
+        },
+      }, "active-catalog");
+      transaction.oncomplete = () => resolve();
+      transaction.onerror = () => reject(transaction.error);
+    });
+    database.close();
+  });
+
+  await page.reload();
+  await expect.poll(() => page.evaluate(
+    () => window.__SYNTHESIS_SOLO_STORE__!.getState().cardDefinitions[0].name,
+  )).not.toBe("过期缓存卡牌");
+  await page.getByRole("button", { name: "打开设置" }).click();
+  await expect(page.getByRole("dialog", { name: "设置" }).getByText("内置卡牌数据", { exact: true })).toBeVisible();
+});
+
 test("rare gemstone cards show their additional acquisition method below the effect", async ({ page }) => {
   await page.goto("/");
   await expect(page.getByTestId("active-seed")).toBeVisible();

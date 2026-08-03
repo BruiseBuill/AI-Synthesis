@@ -46,6 +46,17 @@ For an unresolved investigation, replace the root cause with the confirmed bound
 
 ## Durable Findings
 
+### 2026-08-03 - Workbook updates were masked by a stale runtime snapshot
+
+- Status: resolved
+- Scope: `CardData.xlsm` authoring, generated runtime catalog, and IndexedDB catalog hydration
+- Symptom: after syncing an updated `CardData.xlsm`, normal page reloads continued to show the old card descriptions; the workbook/JSON alignment test exposed the concrete stale name `王冠` instead of the authored `项链`.
+- Root cause: the application imported `src/data/cardData.generated.json` synchronously, but no generator updated it from the workbook. In addition, “重载 CardData.xlsm” stored the bundled workbook as an undifferentiated imported IndexedDB snapshot, which could override later built-in deployments indefinitely.
+- Decisive evidence: `pnpm vitest run src/data/cardDataWorkbook.test.ts` failed on the authored/runtime name mismatch, while tracing `hydrateCardData` showed every valid saved snapshot replaced `defaultTreasureDefinitions` without a catalog-version check.
+- Resolution: `scripts/generate-card-data.mjs` now runs before `dev`, `test`, and `build`; bundled reload snapshots record the built-in catalog version, and hydration clears stale or legacy bundled snapshots while preserving explicitly named custom imports.
+- Regression protection: workbook alignment and importer tests cover generated fields and legacy statue effect codes; repository freshness tests cover version rules; Playwright covers reload persistence and stale bundled-snapshot eviction.
+- Related knowledge: `docs/ai/ARCHITECTURE.md`, `docs/ai/REFERENCES.md`, and `docs/ai/MAINTENANCE.md` describe the generated-data and persistence contracts.
+
 ### 2026-08-03 - WindowsApps ripgrep cannot execute
 
 - Status: diagnosed

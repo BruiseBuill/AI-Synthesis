@@ -48,7 +48,7 @@ The first ten rows describe all executable catalog surfaces across 63 treasure d
 | No material effect | 11 / 13 | Gold Block and eight rare treasures | Explicit `none` material spec; rare scoring/acquisition is evaluated when revealed or at game end |
 | Material limit | 2 / 3 | Statue | Initial-four selection boundary and stackable extra slots |
 | Effective color | 5 / 6 | Crystal, Jewel Box | Per-material effective color sets resolved before Priority 0 |
-| Score modification | 18 / 20 | Candlestick, Ring, Goblet, Seal, Scepter, Golden Apple, Crown, Bronze Bell, Bell | Score ledger, selectors, additive/multiplicative operations, reveal-conditional score |
+| Score modification | 18 / 20 | Candlestick, Ring, Goblet, Seal, Scepter, Golden Apple, Necklace, Bronze Bell, Bell | Score ledger, selectors, additive/multiplicative operations, reveal-conditional score |
 | Safe reveal plan | 6 / 9 | Pottery Jar, Coral, Lantern | Base and bonus safe budgets plus color predicates |
 | Risk reveal plan and interaction | 13 / 20 | Hourglass, Pocket Watch, Die, Vase, Cursed Box, Brooch, Silver Flask | Budget conversion/override, optional and forced reveals, preview decision |
 | Acquisition override | 2 / 2 | Safe | Reveal index and pre-comparison acquisition policy |
@@ -114,7 +114,7 @@ interface SynthesisRuntime {
 }
 ```
 
-`ScoreLedger` must preserve printed per-card scores, effective-color selectors, ordered modifier results, phase bonus, total multipliers, and conditional score used for the current reveal. This is required for Bronze Bell thresholds, Bell's highest-card selection, Crown doubling, and Candlestick's safe-only bonus.
+`ScoreLedger` must preserve printed per-card scores, effective-color selectors, ordered modifier results, phase bonus, total multipliers, and conditional score used for the current reveal. This is required for Bronze Bell thresholds, Bell's highest-card selection, Necklace doubling, and Candlestick's safe-only bonus.
 
 `RevealPlan` must not collapse to only `safeQuota` and `riskQuota`. It must retain base/bonus/resolved counts, safe/risk conversions, optional versus forced risk budgets, a hard override for Brooch, and Silver Flask preview state.
 
@@ -154,8 +154,7 @@ Implemented for the inherent basic draw: basic and treasure discards are separat
 ## Recommended Construction Batches
 
 1. Migrate legacy name-based material effects and the four acquisition phrases to stable authoring codes/parameters without losing workbook VBA.
-2. Add a workbook-to-JSON generator; direct workbook/snapshot field and total alignment is already enforced by Vitest.
-3. Complete whole-game persistence/replay and production packaging of `CardData.xlsm`.
-4. Remove or activate inactive legacy stage UI actions through the canonical automatic stage flow.
+2. Complete whole-game persistence/replay.
+3. Remove or activate inactive legacy stage UI actions through the canonical automatic stage flow.
 
 Each batch requires focused Vitest examples for every operation and stacking/priority interactions. Preserve or add fast-check determinism invariants. Add Playwright workflows for extra material selection, Silver Flask preview rejection, forced Cursed Box reveals, and Clay retention. Before each handoff run `pnpm test`, `pnpm build`, and `pnpm test:e2e` for UI/data-flow batches.

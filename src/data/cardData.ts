@@ -44,6 +44,18 @@ export type TreasureDefinition = z.infer<typeof TreasureDefinitionSchema>;
 
 export const defaultTreasureDefinitions = TreasureCatalogSchema.parse(generatedDefinitions);
 
+export function getCatalogVersion(definitions: readonly TreasureDefinition[]): string {
+  const serialized = JSON.stringify(definitions);
+  let hash = 0x811c9dc5;
+  for (let index = 0; index < serialized.length; index += 1) {
+    hash ^= serialized.charCodeAt(index);
+    hash = Math.imul(hash, 0x01000193);
+  }
+  return `fnv1a-${(hash >>> 0).toString(16).padStart(8, "0")}`;
+}
+
+export const builtInCatalogVersion = getCatalogVersion(defaultTreasureDefinitions);
+
 export function countCards(definitions: readonly TreasureDefinition[]): number {
   return definitions.reduce((total, definition) => total + definition.quantity, 0);
 }

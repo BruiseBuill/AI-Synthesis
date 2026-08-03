@@ -6,7 +6,7 @@
 - `CardData.xlsm`: authoring workbook. One sheet `Sheet4`; used range/table `A1:Q64`; header + 63 definitions; 80 cards total.
 - `docs/ai/CARD_EFFECTS.md`: confirmed effect semantics, complete effect inventory, current executable gaps, and proposed implementation interfaces/batches.
 - `Construction.txt`: original recommended stack/features. Do not treat IndexedDB game saves, replay, or animation entries as implemented.
-- `src/data/cardData.generated.json`: bundled runtime catalog snapshot; 63 definitions/80 cards, explicit `effectCode` on statue definitions, and display/typed additional-acquisition fields on four gemstones.
+- `src/data/cardData.generated.json`: bundled runtime catalog snapshot generated from `CardData.xlsm` by `pnpm card-data:generate`; 63 definitions/80 cards, explicit `effectCode` on statue definitions, and display/typed additional-acquisition fields on four gemstones.
 
 Workbook importer requires headers `代号`, `颜色`, `数量`, `卡面分值`, `效果`, `最终难度`; optional consumed headers: `Priority`, `类别`, `EffectCode`, and the workbook-authored spelling `AdditionalAquireMethod`. Colors: `W|B|Y|R|Special`. The four supported additional-acquisition texts map exactly to `W/B/Y/R`; unknown text is rejected. Known rare names override workbook difficulty in `cardDataImport.ts`.
 
@@ -20,6 +20,7 @@ Current bundled distribution: W 10 definitions/17 cards; B 10/17; Y 17/19; R 18/
 - Rules/state/decks/RNG: `src/game-core/`.
 - Effect specs/instances/priority queue: `src/game-core/effects.ts`.
 - Catalog validation/import/persistence: `src/data/`.
+- Workbook snapshot generator: `scripts/generate-card-data.mjs`; it loads the shared browser/import parser through Vite and runs automatically before `dev`, `test`, and `build`.
 - Store/application actions: `src/store/gameStore.ts`.
 - UI pieces/styles: `src/components/`, `src/styles.css`; `SettingsDialog.tsx` owns catalog controls and the concise basic-rule view.
 - Unit/property behavior evidence: `src/game-core/game.test.ts`, `src/game-core/effects.test.ts`, `src/game-core/random.test.ts`, `src/data/cardData.test.ts`, `src/data/cardDataImport.test.ts`, `src/data/cardDataWorkbook.test.ts`.
