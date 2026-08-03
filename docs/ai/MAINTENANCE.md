@@ -48,34 +48,25 @@ Every debugging task must follow `docs/ai/DEBUGGING.md`. Before handoff, add or 
 
 ### Level 2: Core Handoff
 
-- Scope: completed changes confined to `src/game-core/`, core test helpers, or non-executable documentation, with no changed store/UI contract or browser behavior.
-- During the loop: run the focused core test.
-- Before handoff: run `pnpm verify:core`. Run the full `pnpm test` instead of only `test:core` when the change affects shared card/data contracts.
-- Playwright is not required for core-only scoring, rule, RNG, or deck changes when the store/UI contract is unchanged.
-
-### Level 3: User-Visible Or Cross-Layer Handoff
-
-- Scope: changes to React, CSS, Zustand behavior, browser persistence/import, workbook/runtime data flow, a store/UI-facing core contract, or any user workflow/rendered result.
-- During the loop: run the focused Vitest and/or focused Playwright test.
-- Before handoff: run `pnpm verify:all`.
-- Add or update Playwright coverage for the changed workflow. Capture manual screenshots only for visual/layout work or when automated assertions cannot prove the rendered result.
+- Scope: completed changes confined to src/game-core/, core test helpers, or non-executable documentation, with no changed store/UI contract or browser behavior. Changes to React, CSS, Zustand behavior, browser persistence/import, workbook/runtime data flow, a store/UI-facing core contract, or any user workflow/rendered result are also covered here.
+- During the loop: run the focused core test. Run the focused Vitest and/or focused Playwright test.
+- Before handoff: run pnpm verify:core. Run the full pnpm test instead of only 	est:core when the change affects shared card/data contracts. Run pnpm verify:all for React, CSS, Zustand, persistence/import, workbook/runtime data flow, store/UI contract, or user workflow changes.
+- Playwright is not required for core-only scoring, rule, RNG, or deck changes when the store/UI contract is unchanged. Add or update Playwright coverage for the changed workflow. Capture manual screenshots only for visual/layout work or when automated assertions cannot prove the rendered result.
 
 ### Special Cases
-
 - Core rule/RNG/deck: add focused Vitest coverage; add a fast-check invariant when the state space matters.
 - Catalog/import/persistence: import unit tests + settings Playwright test; reconcile definition/card totals.
-- UI/CSS/store workflow: `pnpm test:e2e` in both configured projects.
-- Deployment: inspect `dist` and run `pnpm test:e2e:deployment` after `pnpm build`; the build must use `/AI-Synthesis/` asset URLs and include `dist/CardData.xlsm`.
+- UI/CSS/store workflow: pnpm test:e2e in both configured projects.
+- Deployment: inspect dist and run pnpm test:e2e:deployment after pnpm build; the build must use /AI-Synthesis/ asset URLs and include dist/CardData.xlsm.
 
 ## Fast Commands
 
-- `pnpm test:score`: material-score scenarios only.
-- `pnpm test:core`: all core Vitest files.
-- `pnpm test:e2e:score`: score-related browser workflows only.
-- `pnpm card-data:generate`: regenerate `src/data/cardData.generated.json` from `CardData.xlsm` with the shared importer; `dev`, `test`, and `build` invoke it automatically.
-- `pnpm verify:core`: Level 2 core suite plus production build.
-- `pnpm verify:all`: Level 3 full unit, build, and E2E gate.
-
+- pnpm test:score: material-score scenarios only.
+- pnpm test:core: all core Vitest files.
+- pnpm test:e2e:score: score-related browser workflows only.
+- pnpm card-data:generate: regenerate src/data/cardData.generated.json from CardData.xlsm with the shared importer; dev, 	est, and uild invoke it automatically.
+- pnpm verify:core: Level 2 core suite plus production build.
+- pnpm verify:all: Level 2 full unit, build, and E2E gate.
 ## Known Gaps/Risks
 
 - `effect` text remains display/authoring metadata, but the complete bundled catalog is compiled through the typed legacy registry. `SynthesisSummary.checkpoints` records a real queue, and score/color/acquisition/explosion/retention effects execute through it.
