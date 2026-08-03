@@ -607,7 +607,7 @@
     "effect": "终局分数加4",
     "quantity": 1,
     "synthesisScore": 0,
-    "difficulty": 18
+    "difficulty": 17
   },
   {
     "name": "王冠",
@@ -617,7 +617,7 @@
     "effect": "终局分数加4",
     "quantity": 1,
     "synthesisScore": 0,
-    "difficulty": 18
+    "difficulty": 17
   },
   {
     "name": "金玫瑰",
@@ -627,7 +627,7 @@
     "effect": "终局分数加4",
     "quantity": 1,
     "synthesisScore": 0,
-    "difficulty": 18
+    "difficulty": 17
   },
   {
     "name": "金杯",
@@ -637,6 +637,6 @@
     "effect": "终局分数加5",
     "quantity": 1,
     "synthesisScore": 0,
-    "difficulty": 20
+    "difficulty": 18
   }
 ]

@@ -30,13 +30,13 @@ describe("CardData row import", () => {
     });
   });
 
-  it("uses the written-rule difficulty for known rare treasures", () => {
+  it("uses the authored difficulty for rare treasures without name-based overrides", () => {
     const [definition] = parseCardDataRows([
       headers,
-      ["金杯", "Special", null, null, "无特效", 1, 0, -10],
+      ["金杯", "Special", null, null, "无特效", 1, 0, 17],
     ]);
 
-    expect(definition.difficulty).toBe(20);
+    expect(definition.difficulty).toBe(17);
   });
 
   it("rejects sheets without the required CardData headers", () => {

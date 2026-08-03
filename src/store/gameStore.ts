@@ -3,6 +3,7 @@ import {
   builtInCatalogVersion,
   countCards,
   defaultTreasureDefinitions,
+  getCatalogVersion,
   type TreasureDefinition,
 } from "../data/cardData";
 import { parseCardDataWorkbook } from "../data/cardDataImport";
@@ -52,7 +53,7 @@ type GameStore = GameState & GameActions & CardDataState;
 
 const builtInSource: CardDataSource = {
   type: "built-in",
-  fileName: "内置卡牌数据",
+  fileName: "CardData.xlsm",
   importedAt: null,
 };
 
@@ -66,10 +67,16 @@ const initialSeed = createRandomSeed(browserRandom);
 
 async function persistImport(
   definitions: TreasureDefinition[],
-  source: Exclude<CardDataSource, { type: "built-in" }>,
+  source: Extract<CardDataSource, { type: "imported" }>,
 ): Promise<CardDataSource> {
   await saveCardDataSnapshot({ definitions, source });
   return source;
+}
+
+async function readBundledCardData(): Promise<TreasureDefinition[]> {
+  const response = await fetch(`${import.meta.env.BASE_URL}CardData.xlsm?reload=${Date.now()}`, { cache: "no-store" });
+  if (!response.ok) throw new Error("项目中未找到 CardData.xlsm，请使用“选择 Excel 文件”导入");
+  return parseCardDataWorkbook(await response.arrayBuffer());
 }
 
 function errorMessage(error: unknown): string {
@@ -90,17 +97,27 @@ export const useGameStore = create<GameStore>((set, get) => ({
   selectRetainedMaterials: (cardIds) => set((state) => submitSynthesisDecision(state, { type: "select-retained-materials", cardIds })),
   advanceStage: () => set((state) => advanceStage(state)),
   hydrateCardData: async () => {
+    set({ cardDataStatus: "loading", cardDataMessage: null });
     try {
       const snapshot = await loadCardDataSnapshot();
-      if (!snapshot) return;
-      if (!isSnapshotCurrent(snapshot, builtInCatalogVersion)) {
-        await clearCardDataSnapshot();
+      if (snapshot?.source.type === "imported" && isSnapshotCurrent(snapshot, builtInCatalogVersion)) {
+        set((state) => ({
+          ...createGame(state.seed, snapshot.definitions),
+          cardDefinitions: snapshot.definitions,
+          cardDataSource: snapshot.source,
+          cardDataStatus: "idle",
+          cardDataMessage: null,
+        }));
         return;
       }
+      if (snapshot) {
+        await clearCardDataSnapshot();
+      }
+      const definitions = await readBundledCardData();
       set((state) => ({
-        ...createGame(state.seed, snapshot.definitions),
-        cardDefinitions: snapshot.definitions,
-        cardDataSource: snapshot.source,
+        ...createGame(state.seed, definitions),
+        cardDefinitions: definitions,
+        cardDataSource: builtInSource,
         cardDataStatus: "idle",
         cardDataMessage: null,
       }));
@@ -111,15 +128,14 @@ export const useGameStore = create<GameStore>((set, get) => ({
   reloadBundledCardData: async () => {
     set({ cardDataStatus: "loading", cardDataMessage: "正在读取 CardData.xlsm…" });
     try {
-      const response = await fetch(`${import.meta.env.BASE_URL}CardData.xlsm?reload=${Date.now()}`, { cache: "no-store" });
-      if (!response.ok) throw new Error("项目中未找到 CardData.xlsm，请使用“选择 Excel 文件”导入");
-      const definitions = await parseCardDataWorkbook(await response.arrayBuffer());
-      const source = await persistImport(definitions, {
+      const definitions = await readBundledCardData();
+      await clearCardDataSnapshot();
+      const source: CardDataSource = {
         type: "bundled",
         fileName: "CardData.xlsm",
         importedAt: new Date().toISOString(),
-        builtInVersion: builtInCatalogVersion,
-      });
+        builtInVersion: getCatalogVersion(definitions),
+      };
       set((state) => ({
         ...createGame(state.seed, definitions),
         cardDefinitions: definitions,
@@ -155,14 +171,14 @@ export const useGameStore = create<GameStore>((set, get) => ({
     set({ cardDataStatus: "loading", cardDataMessage: "正在恢复内置数据…" });
     try {
       await clearCardDataSnapshot();
-      const seed = get().seed;
-      set({
-        ...createGame(seed, defaultTreasureDefinitions),
-        cardDefinitions: defaultTreasureDefinitions,
+      const definitions = await readBundledCardData();
+      set((state) => ({
+        ...createGame(state.seed, definitions),
+        cardDefinitions: definitions,
         cardDataSource: builtInSource,
         cardDataStatus: "success",
-        cardDataMessage: `已恢复内置数据，共 ${countCards(defaultTreasureDefinitions)} 张卡牌`,
-      });
+        cardDataMessage: `已恢复 CardData.xlsm，共 ${countCards(definitions)} 张卡牌`,
+      }));
     } catch (error) {
       set({ cardDataStatus: "error", cardDataMessage: errorMessage(error) });
     }

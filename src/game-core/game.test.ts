@@ -107,7 +107,7 @@ describe("synthesis checkpoints", () => {
 
   it("keeps failed treasures in the queue after the stage prompt", () => {
     const materials = buildBasicDeck().slice(0, 4);
-    const hardTreasure = buildTreasureDeck().find((card) => card.kind === "rare" && card.difficulty === 20)!;
+    const hardTreasure = buildTreasureDeck().find((card) => card.kind === "rare")!;
     let state = { ...createGame("queue-order"), hand: materials, treasureDeck: [hardTreasure, hardTreasure, hardTreasure, buildStagePromptCard()] };
     for (const card of materials) state = toggleMaterial(state, card.id);
 
@@ -167,7 +167,7 @@ describe("synthesis checkpoints", () => {
 
   it("uses color diversity for safe and risk quotas", () => {
     const materials = buildBasicDeck().slice(0, 4);
-    const hardTreasure = buildTreasureDeck().find((card) => card.kind === "rare" && card.difficulty === 20)!;
+    const hardTreasure = buildTreasureDeck().find((card) => card.kind === "rare")!;
     let state = { ...createGame("synthesis-checkpoint"), hand: materials, treasureDeck: [hardTreasure, hardTreasure, hardTreasure, hardTreasure] };
     for (const card of materials) state = toggleMaterial(state, card.id);
 

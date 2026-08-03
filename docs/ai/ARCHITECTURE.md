@@ -22,7 +22,7 @@ Allowed direction is UI -> store -> core/data. Core must remain framework/browse
 - `src/game-core/effects.ts`: pure effect specification/instance compilation and stable priority queue construction.
 - `src/store/gameStore.ts`: Zustand actions; composes core transitions; async catalog hydration/import/reset.
 - `src/data/cardData.ts`: Zod schemas/types; validates bundled JSON at module load.
-- `src/data/cardDataImport.ts`: workbook sheet discovery, row mapping, validation, rare difficulty overrides, and exact additional-acquisition text-to-color mapping.
+- `src/data/cardDataImport.ts`: workbook sheet discovery, row mapping, validation, and exact additional-acquisition text-to-color mapping. Mutable card fields are copied from workbook cells without name-based overrides.
 - `src/data/cardDataRepository.ts`: IndexedDB adapter for imported catalog only.
 - `src/App.tsx`: single-screen composition and store selection; displays the core-evaluated synthesis total and must not calculate rules.
 - `src/components/*`: presentational cards, display-only deck counters, and the settings dialog with catalog management plus a concise card-agnostic rulebook.
@@ -69,9 +69,9 @@ Not implemented: whole-game save/resume/replay and animations. Prototype deck co
 
 ## Catalog Flow
 
-Bundled startup: `CardData.xlsm` -> `pnpm card-data:generate` -> generated JSON import -> `TreasureCatalogSchema.parse` -> `defaultTreasureDefinitions` -> `createGame`. The generator runs automatically before development, unit tests, and production builds, and uses the same row parser as browser imports.
+Bundled startup: before React mounts, the store fetches `CardData.xlsm` with cache bypass, parses it through `TreasureCatalogSchema`, and passes those definitions to `createGame`. A user-selected custom workbook in IndexedDB remains an explicit override. `CardData.xlsm` -> `pnpm card-data:generate` -> generated JSON remains the synchronous core/test fallback; the generator runs automatically before development, unit tests, and production builds and uses the same row parser as browser imports.
 
-Runtime import: `.xlsm/.xlsx` ArrayBuffer -> scan sheets -> locate required headers in first 10 rows -> map rows -> Zod -> IndexedDB database `synthesis-solo`, store `card-data`, key `active-catalog` -> recreate game with current seed. App startup hydrates this snapshot asynchronously. User-selected workbooks persist as explicit overrides. A reload of the bundled `CardData.xlsm` records the built-in catalog version it replaced; startup deletes that snapshot after a deployment changes the built-in version. Legacy snapshots named exactly `CardData.xlsm` are also discarded once so they cannot permanently mask updated authoring data.
+Runtime import: `.xlsm/.xlsx` ArrayBuffer -> scan sheets -> locate required headers in first 10 rows -> map rows -> Zod -> recreate game with the current seed. User-selected workbooks persist in IndexedDB database `synthesis-solo`, store `card-data`, key `active-catalog`. Bundled reloads are not persisted; startup discards legacy bundled snapshots and reads the deployed workbook again, so an old browser snapshot cannot mask updated authoring data. In development, Vite watches `CardData.xlsm` and reloads the page after the workbook is saved.
 
 Production packaging: Vite builds with the GitHub Pages base path `/AI-Synthesis/` and emits the root authoring workbook as `dist/CardData.xlsm`. `reloadBundledCardData` resolves the workbook through `import.meta.env.BASE_URL`, so the same browser flow works on GitHub Pages.
 

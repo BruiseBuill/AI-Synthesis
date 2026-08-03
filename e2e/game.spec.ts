@@ -146,16 +146,29 @@ test("used materials stay visible and dark until synthesis ends", async ({ page 
 
 test("settings shows physical-card difficulty counts and cumulative percentages", async ({ page }) => {
   await page.goto("/");
+  const expected = await page.evaluate(() => {
+    const definitions = window.__SYNTHESIS_SOLO_STORE__!.getState().cardDefinitions;
+    const counts = new Map<number, number>();
+    for (const definition of definitions) {
+      counts.set(definition.difficulty, (counts.get(definition.difficulty) ?? 0) + definition.quantity);
+    }
+    const total = definitions.reduce((sum, definition) => sum + definition.quantity, 0);
+    let cumulative = 0;
+    return [...counts.entries()].sort(([left], [right]) => left - right).map(([difficulty, count]) => {
+      cumulative += count;
+      return { difficulty, count, percentage: Math.round((cumulative / total) * 100) };
+    });
+  });
   await page.getByRole("button", { name: "打开设置" }).click();
   const dialog = page.getByRole("dialog", { name: "设置" });
 
   await dialog.getByRole("button", { name: "查看难度统计" }).click();
   const chart = dialog.getByRole("region", { name: "牌库难度统计" });
   await expect(chart).toBeVisible();
-  await expect(chart.getByRole("img", { name: "难度 4，8 张，小于等于该难度占 10%" })).toBeVisible();
-  await expect(chart.getByRole("img", { name: "难度 5，19 张，小于等于该难度占 34%" })).toBeVisible();
-  await expect(chart.getByRole("img", { name: "难度 20，1 张，小于等于该难度占 100%" })).toBeVisible();
-  await expect(chart.locator(".difficulty-column")).toHaveCount(15);
+  for (const item of [expected[0], expected.at(-1)!]) {
+    await expect(chart.getByRole("img", { name: `难度 ${item.difficulty}，${item.count} 张，小于等于该难度占 ${item.percentage}%` })).toBeVisible();
+  }
+  await expect(chart.locator(".difficulty-column")).toHaveCount(expected.length);
 });
 
 test("settings includes a concise basic rulebook", async ({ page }) => {
@@ -175,6 +188,7 @@ test("settings includes a concise basic rulebook", async ({ page }) => {
 
 test("synthesis header shows the evaluated total score", async ({ page }) => {
   await page.goto("/");
+  await expect(page.getByTestId("active-seed")).toBeVisible();
   await page.evaluate(async () => {
     const [game, cards] = await Promise.all([
       import(/* @vite-ignore */ "/src/game-core/game.ts"),
@@ -201,6 +215,7 @@ test("synthesis header shows the evaluated total score", async ({ page }) => {
 
 test("seal bonuses apply once per matching material", async ({ page }) => {
   await page.goto("/");
+  await expect(page.getByTestId("active-seed")).toBeVisible();
   await page.evaluate(async () => {
     const [game, cards] = await Promise.all([
       import(/* @vite-ignore */ "/src/game-core/game.ts"),
@@ -277,13 +292,13 @@ test("silver flask previews the next risk card before the player commits", async
   expect(await page.evaluate(() => window.__SYNTHESIS_SOLO_STORE__!.getState().treasureDeck[0]?.id)).toBe("e2e-preview-target");
 });
 
-test("settings reloads CardData and restores it from IndexedDB", async ({ page }) => {
+test("settings reloads CardData and reads the bundled workbook again after reload", async ({ page }) => {
   await page.goto("/");
 
   await page.getByRole("button", { name: "打开设置" }).click();
   const dialog = page.getByRole("dialog", { name: "设置" });
   await expect(dialog).toBeVisible();
-  await expect(dialog.getByText("内置卡牌数据")).toBeVisible();
+  await expect(dialog.getByText("CardData.xlsm", { exact: true })).toBeVisible();
 
   await dialog.getByRole("button", { name: "重载 CardData.xlsm" }).click();
   await expect(dialog.getByRole("status")).toContainText("已重载 63 条定义，共 80 张卡牌");
@@ -338,7 +353,7 @@ test("startup discards a bundled CardData snapshot from an older built-in catalo
     () => window.__SYNTHESIS_SOLO_STORE__!.getState().cardDefinitions[0].name,
   )).not.toBe("过期缓存卡牌");
   await page.getByRole("button", { name: "打开设置" }).click();
-  await expect(page.getByRole("dialog", { name: "设置" }).getByText("内置卡牌数据", { exact: true })).toBeVisible();
+  await expect(page.getByRole("dialog", { name: "设置" }).getByText("CardData.xlsm", { exact: true })).toBeVisible();
 });
 
 test("rare gemstone cards show their additional acquisition method below the effect", async ({ page }) => {

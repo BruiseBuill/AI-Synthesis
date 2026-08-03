@@ -58,7 +58,7 @@ export type SchedulerEntry =
   | { kind: "checkpoint"; id: `checkpoint-${SynthesisCheckpoint}`; priority: SynthesisCheckpoint }
   | { kind: "effect"; id: string; priority: number; effect: EffectInstance };
 
-type CompileContext = { color?: CardColor; priority?: number | null; effect?: string };
+type CompileContext = { color?: CardColor; priority?: number | null };
 
 const colorBySeal: Record<string, Exclude<CardColor, "Special">> = { B: "W", Y: "B", R: "Y", W: "R" };
 
@@ -108,9 +108,7 @@ function legacyEffectCodes(name: string, context: CompileContext = {}): CardEffe
       ? [{ type: "modify-score", operation: { type: "double-highest-printed-score", color: colorBySeal[context.color] } }]
       : [];
     case "金苹果": return [{ type: "modify-score", operation: { type: "add-per-color", amount: 1 } }];
-    case "项链": return context.effect === "最终的总分翻倍"
-      ? [{ type: "modify-score", operation: { type: "multiply-total", factor: 2 } }]
-      : [{ type: "none" }];
+    case "项链": return [{ type: "modify-score", operation: { type: "multiply-total", factor: 2 } }];
     case "青铜钟": return [{ type: "modify-score", operation: { type: "add", selector: { type: "printed-score-at-most", threshold: context.color === "B" ? 1 : 2 }, amount: 1 } }];
     case "烛台": return [{ type: "modify-score", operation: { type: "add", selector: { type: "safe-treasure" }, amount: 3 } }];
     default: return [];

@@ -8,9 +8,9 @@
 - `Construction.txt`: original recommended stack/features. Do not treat IndexedDB game saves, replay, or animation entries as implemented.
 - `src/data/cardData.generated.json`: bundled runtime catalog snapshot generated from `CardData.xlsm` by `pnpm card-data:generate`; 63 definitions/80 cards, explicit `effectCode` on statue definitions, and display/typed additional-acquisition fields on four gemstones.
 
-Workbook importer requires headers `代号`, `颜色`, `数量`, `卡面分值`, `效果`, `最终难度`; optional consumed headers: `Priority`, `类别`, `EffectCode`, and the workbook-authored spelling `AdditionalAquireMethod`. Colors: `W|B|Y|R|Special`. The four supported additional-acquisition texts map exactly to `W/B/Y/R`; unknown text is rejected. Known rare names override workbook difficulty in `cardDataImport.ts`.
+Workbook importer requires headers `代号`, `颜色`, `数量`, `卡面分值`, `效果`, `最终难度`; optional consumed headers: `Priority`, `类别`, `EffectCode`, and the workbook-authored spelling `AdditionalAquireMethod`. Colors: `W|B|Y|R|Special`. The four supported additional-acquisition texts map exactly to `W/B/Y/R`; unknown text is rejected. Names, colors, quantities, printed scores, effect descriptions, and final difficulties are copied from workbook cells without name-based overrides.
 
-Current bundled difficulty counts by physical card are: 4:8, 5:19, 6:6, 7:9, 8:5, 9:8, 10:3, 11:3, 12:4, 13:2, 14:3, 15:2, 16:4, 18:3, 20:1.
+Current bundled difficulty counts by physical card are: 4:8, 5:19, 6:6, 7:9, 8:5, 9:8, 10:3, 11:3, 12:4, 13:2, 14:3, 15:2, 16:4, 17:3, 18:1.
 
 Current bundled distribution: W 10 definitions/17 cards; B 10/17; Y 17/19; R 18/19; Special 8/8.
 

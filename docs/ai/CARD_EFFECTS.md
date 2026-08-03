@@ -17,7 +17,7 @@ Snapshot: 2026-08-03. Status: the complete bundled catalog now compiles to typed
 
 ## Current Executable Boundary
 
-Actual behavior now keeps `effect` for display but compiles `effectSpecs` into one `EffectInstance` per physical material. `buildSchedulerQueue` adds fixed Priority 0/50/100/150 checkpoints and sorts all entries deterministically. `runUntilBlocked` executes the queue until a risk decision, silver-flask preview, Clay retention decision, terminal game state, or finalization. Every bundled physical treasure has at least one typed spec; no-material-effect cards compile to `none`. Revealed gemstone acquisition reads `additionalAcquireColor` directly in `resolveTreasure` after Priority 0 has established effective colors.
+Actual behavior keeps `effect` as display-only authoring text and compiles `effectSpecs` into one `EffectInstance` per physical material without parsing that description. `buildSchedulerQueue` adds fixed Priority 0/50/100/150 checkpoints and sorts all entries deterministically. `runUntilBlocked` executes the queue until a risk decision, silver-flask preview, Clay retention decision, terminal game state, or finalization. Every bundled physical treasure has at least one typed spec; no-material-effect cards compile to `none`. Revealed gemstone acquisition reads `additionalAcquireColor` directly in `resolveTreasure` after Priority 0 has established effective colors.
 
 `SynthesisSummary.checkpoints` now records the fixed queue checkpoints that have actually executed; it remains an observability view of the runtime queue, not a second execution mechanism.
 

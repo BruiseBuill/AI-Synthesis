@@ -46,6 +46,17 @@ For an unresolved investigation, replace the root cause with the confirmed bound
 
 ## Durable Findings
 
+### 2026-08-03 - Rare difficulty statistics ignored authored workbook values
+
+- Status: resolved
+- Scope: `CardData.xlsm` import, bundled startup, and settings difficulty statistics
+- Symptom: the workbook contained no difficulty-20 card, but settings still displayed a `20` bucket.
+- Root cause: `cardDataImport.ts` replaced the workbook's final difficulty for eight known rare names with a fixed `16/18/20` registry; the workbook alignment test reused that importer and therefore could not reveal the override. Bundled data could also be hidden by a persisted reload snapshot until its generated catalog version changed.
+- Decisive evidence: direct worksheet inspection showed rare difficulties `16,16,16,16,17,17,17,18`, while the generated runtime snapshot and chart showed `16,16,16,16,18,18,18,20`.
+- Resolution: the importer now copies final difficulty directly from every authored row; React waits for a fresh bundled workbook parse before mounting unless an explicit custom import is active; bundled reloads are no longer persisted, and development watches workbook saves. Effect description text is no longer consulted when compiling the Necklace effect.
+- Regression protection: importer coverage asserts that a known rare name retains its authored difficulty, workbook alignment compares mutable fields, statistics tests use variable fixture buckets, and Playwright derives expected buckets from the active catalog.
+- Related knowledge: `docs/ai/ARCHITECTURE.md`, `docs/ai/CARD_EFFECTS.md`, `docs/ai/REFERENCES.md`, and `docs/ai/MAINTENANCE.md` describe the updated data contract and startup flow.
+
 ### 2026-08-03 - Workbook updates were masked by a stale runtime snapshot
 
 - Status: resolved

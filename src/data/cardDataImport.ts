@@ -9,16 +9,6 @@ import {
 type SpreadsheetCell = string | number | boolean | Date | null | undefined;
 
 const requiredHeaders = ["代号", "颜色", "数量", "卡面分值", "效果", "最终难度"] as const;
-const rareDifficulties: Readonly<Record<string, number>> = {
-  白玉: 16,
-  蓝宝石: 16,
-  黄宝石: 16,
-  红宝石: 16,
-  印玺: 18,
-  王冠: 18,
-  金玫瑰: 18,
-  金杯: 20,
-};
 const additionalAcquireColors: Readonly<Record<string, MaterialColor>> = {
   所有的卡都为白色: "W",
   所有的卡都为蓝色: "B",
@@ -64,8 +54,6 @@ export function parseCardDataRows(rows: SpreadsheetCell[][]): TreasureDefinition
 
     const name = asText(nameCell, "代号", rowNumber);
     const color = asText(colorCell, "颜色", rowNumber) as CardColor;
-    const rawDifficulty = asInteger(row[column("最终难度")], "最终难度", rowNumber);
-    const difficulty = color === "Special" ? (rareDifficulties[name] ?? rawDifficulty) : rawDifficulty;
     const additionalAcquireMethod = column("AdditionalAquireMethod") < 0
       || row[column("AdditionalAquireMethod")] == null
       || row[column("AdditionalAquireMethod")] === ""
@@ -93,7 +81,7 @@ export function parseCardDataRows(rows: SpreadsheetCell[][]): TreasureDefinition
       additionalAcquireColor,
       quantity: asInteger(row[column("数量")], "数量", rowNumber),
       synthesisScore: asInteger(row[column("卡面分值")], "卡面分值", rowNumber),
-      difficulty,
+      difficulty: asInteger(row[column("最终难度")], "最终难度", rowNumber),
     }];
   });
 

@@ -80,7 +80,7 @@ Every debugging task must follow `docs/ai/DEBUGGING.md`. Before handoff, add or 
 
 - `effect` text remains display/authoring metadata, but the complete bundled catalog is compiled through the typed legacy registry. `SynthesisSummary.checkpoints` records a real queue, and score/color/acquisition/explosion/retention effects execute through it.
 - The current `CardData.xlsm` contains VBA and no `EffectCode` column, so the importer retains a centralized legacy statue mapping. Migrate the authoring contract only with a VBA-preserving workflow.
-- The generator writes `cardData.generated.json` before development, unit tests, and builds. A malformed workbook therefore fails before the application starts or ships; `cardDataWorkbook.test.ts` additionally catches authored field, definition-total, and card-total drift.
+- The generator writes `cardData.generated.json` before development, unit tests, and builds. Browser startup still reads the deployed `CardData.xlsm` directly before React mounts; the JSON is the synchronous core/test fallback. A malformed workbook therefore fails before the application starts or ships, and `cardDataWorkbook.test.ts` additionally catches authored field, definition-total, and card-total drift.
 - GitHub Pages deployment is tied to the repository path `/AI-Synthesis/`; renaming the repository requires updating `vite.config.ts` and the deployment smoke test together.
 - Additional acquisition methods are an exact four-text registry. A new authoring phrase must add a typed mapping and rule tests; unsupported text is rejected during import instead of becoming display-only behavior.
 - Whole-game IndexedDB save/resume/replay described in `Construction.txt` is absent; only imported catalog persists.

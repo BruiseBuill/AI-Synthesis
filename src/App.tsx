@@ -1,4 +1,4 @@
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useState } from "react";
 import { AlertTriangle, ArrowRight, Flame, Hand, RefreshCw, Settings, Sparkles } from "lucide-react";
 import { useShallow } from "zustand/react/shallow";
 import { Card } from "./components/Card";
@@ -30,12 +30,10 @@ export default function App() {
     resolveRisk: store.resolveRisk,
     selectRetainedMaterials: store.selectRetainedMaterials,
     advanceStage: store.advanceStage,
-    hydrateCardData: store.hydrateCardData,
   })));
   const [seedDraft, setSeedDraft] = useState(state.seed);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [retainedDraft, setRetainedDraft] = useState<string[]>([]);
-  useEffect(() => { void state.hydrateCardData(); }, [state.hydrateCardData]);
   function handleDeal(event: FormEvent<HTMLFormElement>) { event.preventDefault(); state.startGame(seedDraft); }
   const summary = state.synthesis;
   const riskDecision = summary?.runtime.pendingDecision?.type === "risk-reveal"

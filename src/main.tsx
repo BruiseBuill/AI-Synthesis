@@ -4,12 +4,18 @@ import App from "./App";
 import "./styles.css";
 import { useGameStore } from "./store/gameStore";
 
-if (import.meta.env.DEV) {
-  window.__SYNTHESIS_SOLO_STORE__ = useGameStore;
+async function mountApplication() {
+  if (import.meta.env.DEV) {
+    window.__SYNTHESIS_SOLO_STORE__ = useGameStore;
+  }
+
+  await useGameStore.getState().hydrateCardData();
+
+  createRoot(document.getElementById("root")!).render(
+    <StrictMode>
+      <App />
+    </StrictMode>,
+  );
 }
 
-createRoot(document.getElementById("root")!).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
-);
+void mountApplication();

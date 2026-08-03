@@ -79,7 +79,6 @@ export function buildTreasureDeck(definitions: readonly TreasureDefinition[] = d
       effectSpecs: compileTreasureEffectSpecs(definition.name, definition.effectCode, {
         color: definition.color,
         priority: definition.priority,
-        effect: definition.effect,
       }),
     })),
   );
