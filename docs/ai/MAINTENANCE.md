@@ -27,6 +27,13 @@
 - Visual-only: edit `src/styles.css`; verify desktop/mobile, stable card dimensions, and effect-overflow assertions.
 - Catalog statistics: aggregate physical cards using definition `quantity`; cumulative percentages are rounded to integers and must end at 100%.
 
+## Git And GitHub Boundary
+
+- By default, Codex stops after implementing, validating, and reporting local changes. The user owns staging, committing, pushing, and publishing.
+- Codex must not run `git add`, create commits or tags, push branches, create or update pull requests, or perform other GitHub operations unless the user explicitly requests that specific action in the current task.
+- Read-only local Git commands such as `git status`, `git diff`, and `git log` are allowed when needed to understand scope or verify the handoff. Avoid GitHub API, app, and CLI calls unless the task explicitly requires remote GitHub information.
+- For normal releases, the user reviews and pushes the intended files to `main`; the existing GitHub Pages workflow then builds and deploys the site automatically.
+
 ## Change Levels And Verification
 
 Classify the task before validation. Mixed changes use the highest applicable level. During implementation, run the narrowest relevant test; run the full gate once after the final edit.
