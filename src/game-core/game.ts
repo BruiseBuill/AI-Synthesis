@@ -175,6 +175,26 @@ export function drawBasicCard(state: GameState): GameState {
   return next.pendingBasicDraws === 0 ? next : { ...next, pendingBasicDraws: state.pendingBasicDraws };
 }
 
+export function addTopTreasuresToHand(state: GameState, count: number): GameState {
+  if (state.status !== "idle") return state;
+  const gained: GameCard[] = [];
+  let treasureDeck = state.treasureDeck;
+  for (let index = 0; index < count; index += 1) {
+    const [card, ...rest] = treasureDeck;
+    if (!card || card.kind === "stage") break;
+    gained.push(card);
+    treasureDeck = rest;
+  }
+  if (gained.length === 0) return state;
+  return {
+    ...state,
+    treasureDeck,
+    hand: [...state.hand, ...gained],
+    revealedTreasures: [...state.revealedTreasures, ...gained.map((card) => ({ ...card, resolution: "gained" as const }))],
+    ownedTreasures: [...state.ownedTreasures, ...gained],
+  };
+}
+
 export function revealTreasureCard(state: GameState): GameState {
   const [card, ...treasureDeck] = state.treasureDeck;
   if (!card || card.kind === "stage") return state;

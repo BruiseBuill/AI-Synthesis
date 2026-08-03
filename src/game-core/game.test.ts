@@ -1,7 +1,7 @@
 import fc from "fast-check";
 import { describe, expect, it } from "vitest";
 import { buildBasicDeck, buildStagePromptCard, buildTreasureDeck, materialColors, type GameCard } from "./cards";
-import { beginSynthesis, canBeginSynthesis, createGame, drawBasicCard, INITIAL_HAND_SIZE, resolveNextRisk, revealTreasureCard, submitSynthesisDecision, toggleMaterial, type GameState } from "./game";
+import { addTopTreasuresToHand, beginSynthesis, canBeginSynthesis, createGame, drawBasicCard, INITIAL_HAND_SIZE, resolveNextRisk, revealTreasureCard, submitSynthesisDecision, toggleMaterial, type GameState } from "./game";
 import { defaultTreasureDefinitions } from "../data/cardData";
 
 describe("card decks", () => {
@@ -638,5 +638,39 @@ describe("catalog score, color, safety, and retention effects", () => {
     expect(protectedState.cauldronExplosions).toBe(1);
     expect(protectedState.synthesis?.gained.map((card) => card.id)).toContain("risk-gain");
     expect(protectedState.synthesis?.destroyed).toHaveLength(0);
+  });
+});
+
+describe("cheat helper: add top treasures to hand", () => {
+  it("deals the top four treasure cards into the hand while idle", () => {
+    const game = createGame("cheat-deal");
+    const expected = game.treasureDeck.slice(0, 4).map((card) => card.id);
+
+    const cheated = addTopTreasuresToHand(game, 4);
+
+    expect(cheated.hand.map((card) => card.id)).toEqual([...game.hand.map((card) => card.id), ...expected]);
+    expect(cheated.treasureDeck.slice(0, 4).map((card) => card.id)).toEqual(game.treasureDeck.slice(4, 8).map((card) => card.id));
+    expect(cheated.revealedTreasures.map((card) => card.id)).toEqual(expected);
+    expect(cheated.revealedTreasures.every((card) => card.resolution === "gained")).toBe(true);
+    expect(cheated.ownedTreasures.map((card) => card.id)).toEqual(expected);
+  });
+
+  it("stops before the stage prompt and returns the same state when the deck is empty", () => {
+    const game = { ...createGame("cheat-stage"), treasureDeck: [buildStagePromptCard()] };
+    expect(addTopTreasuresToHand(game, 4)).toBe(game);
+
+    const empty = { ...game, treasureDeck: [] };
+    expect(addTopTreasuresToHand(empty, 4)).toBe(empty);
+  });
+
+  it("refuses to run while a synthesis is in progress", () => {
+    const materials = buildBasicDeck().slice(0, 4);
+    let state = { ...createGame("cheat-busy"), hand: materials };
+    for (const card of materials) state = toggleMaterial(state, card.id);
+    const started = beginSynthesis(state);
+    expect(started.status).not.toBe("idle");
+
+    const cheated = addTopTreasuresToHand(started, 4);
+    expect(cheated).toBe(started);
   });
 });

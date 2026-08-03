@@ -15,6 +15,7 @@ import {
   type CardDataSource,
 } from "../data/cardDataRepository";
 import {
+  addTopTreasuresToHand,
   advanceStage,
   beginSynthesis,
   canBeginSynthesis,
@@ -33,6 +34,7 @@ interface GameActions {
   toggleMaterial: (cardId: string) => void;
   beginSynthesis: () => void;
   canSynthesize: () => boolean;
+  addTopTreasuresToHand: (count: number) => void;
   resolveRisk: (continueReveal: boolean) => void;
   selectRetainedMaterials: (cardIds: string[]) => void;
   advanceStage: () => void;
@@ -93,6 +95,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   toggleMaterial: (cardId) => set((state) => toggleMaterial(state, cardId)),
   beginSynthesis: () => set((state) => beginSynthesis(state)),
   canSynthesize: () => canBeginSynthesis(get()),
+  addTopTreasuresToHand: (count) => set((state) => addTopTreasuresToHand(state, count)),
   resolveRisk: (continueReveal) => set((state) => resolveNextRisk(state, continueReveal)),
   selectRetainedMaterials: (cardIds) => set((state) => submitSynthesisDecision(state, { type: "select-retained-materials", cardIds })),
   advanceStage: () => set((state) => advanceStage(state)),

@@ -718,6 +718,23 @@ input:focus-visible {
   border-color: #3d443b;
 }
 
+.cheat-button {
+  color: #fff;
+  background: #6d2f7a;
+  border-color: #6d2f7a;
+}
+
+.cheat-button:hover:not(:disabled) {
+  background: #823c92;
+}
+
+.cheat-button:disabled {
+  color: #a89b8f;
+  background: #4a4a46;
+  border-color: #4a4a46;
+  cursor: not-allowed;
+}
+
 .difficulty-chart {
   margin: 8px 20px 18px;
   padding: 14px 14px 12px;

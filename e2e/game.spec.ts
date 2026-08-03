@@ -296,6 +296,70 @@ test("silver flask previews the next risk card before the player commits", async
   expect(await page.evaluate(() => window.__SYNTHESIS_SOLO_STORE__!.getState().treasureDeck[0]?.id)).toBe("e2e-preview-target");
 });
 
+test("synthesis stats show risk cards opened out of the maximum", async ({ page }) => {
+  await page.goto("/");
+  await expect(page.getByTestId("active-seed")).toBeVisible();
+  await page.waitForTimeout(100);
+  await page.evaluate(async () => {
+    const [game, cards] = await Promise.all([
+      import(/* @vite-ignore */ "/src/game-core/game.ts"),
+      import(/* @vite-ignore */ "/src/game-core/cards.ts"),
+    ]);
+    const useGameStore = window.__SYNTHESIS_SOLO_STORE__!;
+    const redBasics = cards.buildBasicDeck().filter((card) => card.color === "R").slice(0, 4);
+    const template = cards.buildTreasureDeck().find((card) => card.kind === "treasure")!;
+    const safeFillers = [0, 1, 2].map((index) => ({ ...template, id: `e2e-risk-safe-${index}`, name: `安全填充-${index}`, difficulty: 0 }));
+    const riskGain = { ...template, id: "e2e-risk-gain", name: "风险获取目标", difficulty: 0 };
+    let state = {
+      ...game.createGame("risk-stat-e2e"),
+      hand: redBasics,
+      treasureDeck: [...safeFillers, riskGain, cards.buildStagePromptCard()],
+    };
+    for (const card of state.hand) state = game.toggleMaterial(state, card.id);
+    useGameStore.setState(state);
+  });
+
+  await expect(page.getByText("已选 4/4")).toBeVisible();
+  await page.getByRole("button", { name: "开始合成" }).click();
+  const synthesis = page.getByRole("region", { name: "本次合成结算" });
+  await expect(synthesis.getByText("已翻开的风险牌数量/最大能翻开的风险牌数量", { exact: true })).toBeVisible();
+  await expect(synthesis.getByText("0/1", { exact: true })).toBeVisible();
+
+  await page.getByRole("button", { name: "继续翻下一张" }).click();
+  await expect(synthesis.getByText("1/1", { exact: true })).toBeVisible();
+});
+
+test("settings cheat button adds the top four treasure cards when idle and stays disabled during a synthesis", async ({ page }) => {
+  await page.goto("/");
+  await expect(page.getByTestId("active-seed")).toBeVisible();
+  await page.waitForTimeout(100);
+
+  const cheat = page.getByRole("button", { name: /作弊：获取宝物牌堆顶部前 4 张/ });
+  const handRegion = page.getByRole("region", { name: "当前手牌" });
+
+  const deckTopIds = await page.evaluate(() => {
+    const state = window.__SYNTHESIS_SOLO_STORE__!.getState();
+    return state.treasureDeck.slice(0, 4).map((card) => card.id);
+  });
+
+  await page.getByRole("button", { name: "打开设置" }).click();
+  await expect(cheat).toBeEnabled();
+  await cheat.click();
+
+  await page.getByRole("button", { name: "关闭设置" }).click();
+  await expect(handRegion.locator(`[data-card-id="${deckTopIds[0]}"]`)).toBeVisible();
+  await expect(handRegion.locator(`[data-card-id="${deckTopIds[3]}"]`)).toBeVisible();
+  await expect(page.getByRole("region", { name: "本次翻开的宝物" }).getByTestId("treasure-card")).toHaveCount(4);
+
+  const hand = handRegion.getByTestId("hand-card");
+  for (let index = 0; index < 4; index += 1) await hand.nth(index).click();
+  await page.getByRole("button", { name: "开始合成" }).click();
+  await expect(page.getByRole("region", { name: "本次合成结算" })).toBeVisible();
+
+  await page.getByRole("button", { name: "打开设置" }).click();
+  await expect(cheat).toBeDisabled();
+});
+
 test("settings reloads CardData and reads the bundled workbook again after reload", async ({ page }) => {
   await page.goto("/");
 

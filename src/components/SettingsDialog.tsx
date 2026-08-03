@@ -1,13 +1,15 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { BarChart3, BookOpen, Database, RefreshCw, RotateCcw, Upload, X } from "lucide-react";
+import { BarChart3, BookOpen, Database, RefreshCw, RotateCcw, Sparkles, Upload, X } from "lucide-react";
 import { countCards, getDifficultyStats } from "../data/cardData";
 import { useGameStore } from "../store/gameStore";
 
 interface SettingsDialogProps {
   onClose: () => void;
+  canCheat?: boolean;
+  onCheat?: () => void;
 }
 
-export function SettingsDialog({ onClose }: SettingsDialogProps) {
+export function SettingsDialog({ onClose, canCheat = false, onCheat }: SettingsDialogProps) {
   const fileInput = useRef<HTMLInputElement>(null);
   const [activeView, setActiveView] = useState<"data" | "rules">("data");
   const [chartVisible, setChartVisible] = useState(false);
@@ -73,6 +75,9 @@ export function SettingsDialog({ onClose }: SettingsDialogProps) {
             </button>
             <button type="button" className="text-action" onClick={() => void restoreBuiltIn()} disabled={loading || source.type === "built-in"}>
               <RotateCcw size={15} aria-hidden="true" />恢复内置数据
+            </button>
+            <button type="button" className="secondary-action cheat-button" onClick={onCheat} disabled={!canCheat}>
+              <Sparkles size={17} aria-hidden="true" />作弊：获取宝物牌堆顶部前 4 张
             </button>
           </div>
           {chartVisible && <section id="difficulty-chart" className="difficulty-chart" aria-label="牌库难度统计">

@@ -30,6 +30,7 @@ export default function App() {
     resolveRisk: store.resolveRisk,
     selectRetainedMaterials: store.selectRetainedMaterials,
     advanceStage: store.advanceStage,
+    addTopTreasuresToHand: store.addTopTreasuresToHand,
   })));
   const [seedDraft, setSeedDraft] = useState(state.seed);
   const [settingsOpen, setSettingsOpen] = useState(false);
@@ -66,7 +67,7 @@ export default function App() {
           <section className="play-section" aria-labelledby="hand-heading"><div className="section-heading"><div><Hand size={20} /><h2 id="hand-heading">当前手牌</h2></div><span>{displayedHand.length} 张 · 已选 {state.selectedMaterialIds.length}/{state.materialLimit}</span></div><div className="card-grid hand-grid">{displayedHand.map((card) => { const used = activeMaterialIds.has(card.id); return <Card key={card.id} card={card} selected={state.selectedMaterialIds.includes(card.id)} used={used} onClick={used ? undefined : () => state.toggleMaterial(card.id)} />; })}</div><div className="action-row"><button className="primary-action synthesize-button" disabled={!canSynthesize} onClick={state.beginSynthesis}><Flame size={18} />开始合成</button><span className="action-hint">先选择 4 张初始材料 · 雕像可增加额外材料位</span></div></section>
           {summary && <section className="synthesis-panel" aria-label="本次合成结算">
             <div className="section-heading"><div><Sparkles size={20} /><h2>本次合成</h2></div><span>总分 {summary.score}</span></div>
-            <div className="synthesis-stats"><div><strong>{summary.safeQuota}</strong><span>安全额度</span></div><div><strong>{summary.riskQuota}</strong><span>风险额度</span></div><div><strong>{summary.gained.length}</strong><span>已获得</span></div><div><strong>{state.cauldronExplosions}/2</strong><span>炸锅</span></div></div>
+            <div className="synthesis-stats"><div><strong>{summary.safeQuota}</strong><span>安全额度</span></div><div><strong>{summary.riskResolved}/{summary.riskQuota}</strong><span>已翻开的风险牌数量/最大能翻开的风险牌数量</span></div><div><strong>{summary.gained.length}</strong><span>已获得</span></div><div><strong>{state.cauldronExplosions}/2</strong><span>炸锅</span></div></div>
             {state.status === "risk" && <div className="risk-controls">
               {riskDecision?.preview && <div className="risk-preview" data-testid="risk-preview"><span>银壶预览</span><strong>{riskDecision.preview.name}</strong><small>难度 {riskDecision.preview.difficulty ?? "-"} · 分值 {riskDecision.preview.synthesisScore}</small></div>}
               <div className="risk-warning"><AlertTriangle size={18} /><span>{riskDecision?.forced ? `必须翻完本次 ${summary.riskQuota} 张风险宝物。` : `风险宝物需要逐张决定，最多翻 ${summary.riskQuota} 张。`}</span></div>
@@ -83,7 +84,7 @@ export default function App() {
           <section className="play-section treasure-section" aria-labelledby="treasure-heading"><div className="section-heading"><div><Sparkles size={20} /><h2 id="treasure-heading">本次翻开的宝物</h2></div><span>{state.revealedTreasures.length} 张</span></div>{state.revealedTreasures.length === 0 ? <div className="empty-treasure" data-testid="empty-treasure"><span aria-hidden="true">◇</span><p>宝物台尚空</p></div> : <div className="card-grid treasure-grid">{state.revealedTreasures.map((card) => <Card key={card.id} card={card} />)}</div>}</section>
         </div>
       </div>
-      {settingsOpen && <SettingsDialog onClose={() => setSettingsOpen(false)} />}
+      {settingsOpen && <SettingsDialog onClose={() => setSettingsOpen(false)} canCheat={state.status === "idle"} onCheat={() => state.addTopTreasuresToHand(4)} />}
     </main>
   );
 }
