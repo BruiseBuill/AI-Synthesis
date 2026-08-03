@@ -17,63 +17,45 @@
 
 ## Change Map
 
-- Rule/state transition: edit `src/game-core/game.ts`; cover examples and invariants in `src/game-core/game.test.ts`.
-- Effect contract/order: edit `src/game-core/effects.ts`; cover specs, instance stacking, tie-break order, and checkpoint behavior in `src/game-core/effects.test.ts`.
+- Rule/state transition: edit `src/game-core/game.ts`.
+- Effect contract/order: edit `src/game-core/effects.ts`.
 - Card/deck shape: edit `src/game-core/cards.ts` + schema if needed; preserve stable IDs or document migration impact.
-- Card spreadsheet contract: edit `cardData.ts`, `cardDataImport.ts`, import/alignment tests, workbook, and generated JSON together. Preserve the workbook header spelling `AdditionalAquireMethod` unless the authoring file is migrated in the same change.
+- Card spreadsheet contract: edit `cardData.ts`, `cardDataImport.ts`, workbook, and generated JSON together. Preserve the workbook header spelling `AdditionalAquireMethod` unless the authoring file is migrated in the same change.
 - Persistence: isolate browser storage in `data/*`; version IndexedDB/schema and define migration/fallback behavior.
 - Store async behavior: edit `src/store/gameStore.ts`; importing/hydrating intentionally restarts the game with current seed.
-- UI workflow: edit `src/App.tsx`/components; keep executable rules out of JSX, while card-agnostic explanatory copy belongs in `SettingsDialog`; add Playwright coverage.
-- Visual-only: edit `src/styles.css`; verify desktop/mobile, stable card dimensions, and effect-overflow assertions.
+- UI workflow: edit `src/App.tsx`/components; keep executable rules out of JSX, while card-agnostic explanatory copy belongs in `SettingsDialog`.
+- Visual-only: edit `src/styles.css`; verify desktop/mobile and stable card dimensions manually.
 - Catalog statistics: aggregate physical cards using definition `quantity`; cumulative percentages are rounded to integers and must end at 100%.
 
 ## Git And GitHub Boundary
 
-- By default, Codex stops after implementing, validating, and reporting local changes. The user owns staging, committing, pushing, and publishing.
+- By default, Codex stops after implementing and reporting local changes. The user owns staging, committing, pushing, and publishing.
 - Codex must not run `git add`, create commits or tags, push branches, create or update pull requests, or perform other GitHub operations unless the user explicitly requests that specific action in the current task.
 - Read-only local Git commands such as `git status`, `git diff`, and `git log` are allowed when needed to understand scope or verify the handoff. Avoid GitHub API, app, and CLI calls unless the task explicitly requires remote GitHub information.
 - For normal releases, the user reviews and pushes the intended files to `main`; the existing GitHub Pages workflow then builds and deploys the site automatically.
 
-## Change Levels And Verification
+## Validation
 
-Classify the task before validation. Mixed changes use the highest applicable level. During implementation, run the narrowest relevant test; run the full gate once after the final edit.
-
-Every debugging task must follow `docs/ai/DEBUGGING.md`. Before handoff, add or refine a durable finding there and update any owning topic whose contract, status, invariant, command, or risk changed. This knowledge closeout is required at every level and is separate from the validation command gate.
-
-### Level 1: Focused Debugging
-
-- Scope: investigation, reproduction, or an incomplete local iteration that is not being handed off as finished behavior.
-- Run: the narrowest relevant Vitest or Playwright test, such as `pnpm test:score` or `pnpm test:e2e:score`.
-- Do not run a production build, the full unit suite, full E2E, or screenshot pass unless the focused result points to a cross-module problem.
-
-### Level 2: Core Handoff
-
-- Scope: completed changes confined to src/game-core/, core test helpers, or non-executable documentation, with no changed store/UI contract or browser behavior. Changes to React, CSS, Zustand behavior, browser persistence/import, workbook/runtime data flow, a store/UI-facing core contract, or any user workflow/rendered result are also covered here.
-- During the loop: run the focused core test. Run the focused Vitest and/or focused Playwright test.
-- Before handoff: run pnpm verify:core. Run the full pnpm test instead of only 	est:core when the change affects shared card/data contracts. Run pnpm verify:all for React, CSS, Zustand, persistence/import, workbook/runtime data flow, store/UI contract, or user workflow changes.
-- Playwright is not required for core-only scoring, rule, RNG, or deck changes when the store/UI contract is unchanged. Add or update Playwright coverage for the changed workflow. Capture manual screenshots only for visual/layout work or when automated assertions cannot prove the rendered result.
-
-### Special Cases
-- Core rule/RNG/deck: add focused Vitest coverage; add a fast-check invariant when the state space matters.
-- Catalog/import/persistence: import unit tests + settings Playwright test; reconcile definition/card totals.
-- UI/CSS/store workflow: pnpm test:e2e in both configured projects.
-- Deployment: inspect dist and run pnpm test:e2e:deployment after pnpm build; the build must use /AI-Synthesis/ asset URLs and include dist/CardData.xlsm.
+Codex does not run tests, builds, or any verification gate. All validation is performed by the user.
 
 ## Fast Commands
 
 - pnpm test:score: material-score scenarios only.
 - pnpm test:core: all core Vitest files.
 - pnpm test:e2e:score: score-related browser workflows only.
-- pnpm card-data:generate: regenerate src/data/cardData.generated.json from CardData.xlsm with the shared importer; dev, 	est, and uild invoke it automatically.
-- pnpm verify:core: Level 2 core suite plus production build.
-- pnpm verify:all: Level 2 full unit, build, and E2E gate.
+- pnpm card-data:generate: regenerate src/data/cardData.generated.json from CardData.xlsm with the shared importer; dev, test, and build invoke it automatically.
+- pnpm test: all Vitest files.
+- pnpm test:e2e: all Playwright browser workflows.
+- pnpm test:e2e:deployment: deployed-build smoke coverage.
+- pnpm build: TypeScript check plus production build.
+
 ## Known Gaps/Risks
 
 - `effect` text remains display/authoring metadata, but the complete bundled catalog is compiled through the typed legacy registry. `SynthesisSummary.checkpoints` records a real queue, and score/color/acquisition/explosion/retention effects execute through it.
 - The current `CardData.xlsm` contains VBA and no `EffectCode` column, so the importer retains a centralized legacy statue mapping. Migrate the authoring contract only with a VBA-preserving workflow.
-- The generator writes `cardData.generated.json` before development, unit tests, and builds. Browser startup still reads the deployed `CardData.xlsm` directly before React mounts; the JSON is the synchronous core/test fallback. A malformed workbook therefore fails before the application starts or ships, and `cardDataWorkbook.test.ts` additionally catches authored field, definition-total, and card-total drift.
+- The generator writes `cardData.generated.json` before development, unit tests, and builds. Browser startup still reads the deployed `CardData.xlsm` directly before React mounts; the JSON is the synchronous core/test fallback. A malformed workbook therefore fails before the application starts or ships.
 - GitHub Pages deployment is tied to the repository path `/AI-Synthesis/`; renaming the repository requires updating `vite.config.ts` and the deployment smoke test together.
-- Additional acquisition methods are an exact four-text registry. A new authoring phrase must add a typed mapping and rule tests; unsupported text is rejected during import instead of becoming display-only behavior.
+- Additional acquisition methods are an exact four-text registry. A new authoring phrase must add a typed mapping; unsupported text is rejected during import instead of becoming display-only behavior.
 - Whole-game IndexedDB save/resume/replay described in `Construction.txt` is absent; only imported catalog persists.
 - Stage UI state (`finished`, `stagePromptVisible`, `advanceStage`) is inactive legacy surface.
 - Core diagnostic draw/reveal helpers remain testable, but the UI no longer exposes direct deck actions outside the synthesis flow.

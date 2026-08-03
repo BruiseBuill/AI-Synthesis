@@ -157,4 +157,4 @@ Implemented for the inherent basic draw: basic and treasure discards are separat
 2. Complete whole-game persistence/replay.
 3. Remove or activate inactive legacy stage UI actions through the canonical automatic stage flow.
 
-Each batch requires focused Vitest examples for every operation and stacking/priority interactions. Preserve or add fast-check determinism invariants. Add Playwright workflows for extra material selection, Silver Flask preview rejection, forced Cursed Box reveals, and Clay retention. Before each handoff run `pnpm test`, `pnpm build`, and `pnpm test:e2e` for UI/data-flow batches.
+Each batch should add focused Vitest examples for every operation and stacking/priority interactions. Preserve or add fast-check determinism invariants. Add Playwright workflows for extra material selection, Silver Flask preview rejection, forced Cursed Box reveals, and Clay retention. Final validation is performed by the user.

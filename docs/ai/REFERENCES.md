@@ -23,8 +23,8 @@ Current bundled distribution: W 10 definitions/17 cards; B 10/17; Y 17/19; R 18/
 - Workbook snapshot generator: `scripts/generate-card-data.mjs`; it loads the shared browser/import parser through Vite and runs automatically before `dev`, `test`, and `build`.
 - Store/application actions: `src/store/gameStore.ts`.
 - UI pieces/styles: `src/components/`, `src/styles.css`; `SettingsDialog.tsx` owns catalog controls and the concise basic-rule view.
-- Unit/property behavior evidence: `src/game-core/game.test.ts`, `src/game-core/effects.test.ts`, `src/game-core/random.test.ts`, `src/data/cardData.test.ts`, `src/data/cardDataImport.test.ts`, `src/data/cardDataWorkbook.test.ts`.
-- Browser behavior evidence: `e2e/game.spec.ts`, including total-score display, settings rulebook navigation, and absence of direct deck-action buttons.
+- Test files: `src/game-core/game.test.ts`, `src/game-core/effects.test.ts`, `src/game-core/random.test.ts`, `src/data/cardData.test.ts`, `src/data/cardDataImport.test.ts`, `src/data/cardDataWorkbook.test.ts`.
+- Browser test files: `e2e/game.spec.ts`, including total-score display, settings rulebook navigation, and absence of direct deck-action buttons.
 
 ## Tooling References
 

@@ -15,8 +15,12 @@ pnpm dev
 
 ## 验证
 
+验证由用户自行完成。可用的命令：
+
 ```powershell
-pnpm verify:all
+pnpm test          # 单元测试（Vitest）
+pnpm test:e2e      # 浏览器端到端测试（Playwright）
+pnpm build         # 类型检查 + 生产构建
 ```
 
 ## 发布

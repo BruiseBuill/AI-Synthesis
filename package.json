@@ -17,9 +17,7 @@
     "test:watch": "vitest",
     "test:e2e": "playwright test",
     "test:e2e:deployment": "playwright test --config playwright.deployment.config.ts",
-    "test:e2e:score": "playwright test -g \"score|seal|synthesis header\"",
-    "verify:core": "pnpm test:core && pnpm build",
-    "verify:all": "pnpm test && pnpm build && pnpm test:e2e && pnpm test:e2e:deployment"
+    "test:e2e:score": "playwright test -g \"score|seal|synthesis header\""
   },
   "dependencies": {
     "lucide-react": "^0.536.0",
