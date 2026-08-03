@@ -1,0 +1,642 @@
+[
+  {
+    "name": "陶罐",
+    "color": "W",
+    "priority": 1,
+    "category": "额外获得卡牌",
+    "effect": "额外打开一张安全宝物卡",
+    "quantity": 3,
+    "synthesisScore": 2,
+    "difficulty": 4
+  },
+  {
+    "name": "陶罐",
+    "color": "B",
+    "priority": 2,
+    "category": "额外获得卡牌",
+    "effect": "额外打开一张安全宝物卡",
+    "quantity": 2,
+    "synthesisScore": 3,
+    "difficulty": 7
+  },
+  {
+    "name": "陶罐",
+    "color": "Y",
+    "priority": 3,
+    "category": "额外获得卡牌",
+    "effect": "额外打开一张安全宝物卡",
+    "quantity": 1,
+    "synthesisScore": 4,
+    "difficulty": 11
+  },
+  {
+    "name": "陶罐",
+    "color": "R",
+    "priority": 4,
+    "category": "额外获得卡牌",
+    "effect": "额外打开一张安全宝物卡",
+    "quantity": 1,
+    "synthesisScore": 5,
+    "difficulty": 13
+  },
+  {
+    "name": "骰子",
+    "color": "W",
+    "priority": 51,
+    "category": "额外获得卡牌",
+    "effect": "可以额外打开一张风险宝物卡",
+    "quantity": 5,
+    "synthesisScore": 3,
+    "difficulty": 5
+  },
+  {
+    "name": "骰子",
+    "color": "B",
+    "priority": 52,
+    "category": "额外获得卡牌",
+    "effect": "可以额外打开一张风险宝物卡",
+    "quantity": 3,
+    "synthesisScore": 4,
+    "difficulty": 9
+  },
+  {
+    "name": "骰子",
+    "color": "Y",
+    "priority": 53,
+    "category": "额外获得卡牌",
+    "effect": "可以额外打开一张风险宝物卡",
+    "quantity": 1,
+    "synthesisScore": 5,
+    "difficulty": 12
+  },
+  {
+    "name": "宝瓶",
+    "color": "R",
+    "priority": 54,
+    "category": "额外获得卡牌",
+    "effect": "可以额外打开两张风险宝物卡",
+    "quantity": 2,
+    "synthesisScore": 2,
+    "difficulty": 5
+  },
+  {
+    "name": "宝瓶",
+    "color": "R",
+    "priority": 54,
+    "category": "额外获得卡牌",
+    "effect": "可以额外打开两张风险宝物卡",
+    "quantity": 1,
+    "synthesisScore": 2,
+    "difficulty": 5
+  },
+  {
+    "name": "宝瓶",
+    "color": "R",
+    "priority": 54,
+    "category": "额外获得卡牌",
+    "effect": "可以额外打开两张风险宝物卡",
+    "quantity": 1,
+    "synthesisScore": 3,
+    "difficulty": 8
+  },
+  {
+    "name": "诅咒盒",
+    "color": "B",
+    "priority": 60,
+    "category": "额外获得卡牌",
+    "effect": "额外打开三张风险宝物卡，并且所有的风险宝物卡必须打开",
+    "quantity": 1,
+    "synthesisScore": 3,
+    "difficulty": 7
+  },
+  {
+    "name": "诅咒盒",
+    "color": "Y",
+    "priority": 61,
+    "category": "额外获得卡牌",
+    "effect": "额外打开三张风险宝物卡，并且所有的风险宝物卡必须打开",
+    "quantity": 1,
+    "synthesisScore": 4,
+    "difficulty": 11
+  },
+  {
+    "name": "沙漏",
+    "color": "B",
+    "priority": -11,
+    "category": "额外获得卡牌",
+    "effect": "可以额外打开三张风险宝物卡，但所有的安全宝物都变为风险宝物",
+    "quantity": 1,
+    "synthesisScore": 3,
+    "difficulty": 8
+  },
+  {
+    "name": "沙漏",
+    "color": "Y",
+    "priority": -11,
+    "category": "额外获得卡牌",
+    "effect": "可以额外打开三张风险宝物卡，但所有的安全宝物都变为风险宝物",
+    "quantity": 1,
+    "synthesisScore": 5,
+    "difficulty": 14
+  },
+  {
+    "name": "黏土",
+    "color": "W",
+    "priority": 202,
+    "category": "额外获得卡牌",
+    "effect": "可以保留你的一张合成卡",
+    "quantity": 1,
+    "synthesisScore": 0,
+    "difficulty": 4
+  },
+  {
+    "name": "黏土",
+    "color": "B",
+    "priority": 200,
+    "category": "额外获得卡牌",
+    "effect": "可以保留你的一张合成卡",
+    "quantity": 2,
+    "synthesisScore": 1,
+    "difficulty": 7
+  },
+  {
+    "name": "黏土",
+    "color": "Y",
+    "priority": 201,
+    "category": "额外获得卡牌",
+    "effect": "可以保留你的一张合成卡",
+    "quantity": 1,
+    "synthesisScore": 2,
+    "difficulty": 11
+  },
+  {
+    "name": "黏土",
+    "color": "Y",
+    "priority": 201,
+    "category": "额外获得卡牌",
+    "effect": "可以保留你的一张合成卡",
+    "quantity": 1,
+    "synthesisScore": 3,
+    "difficulty": 15
+  },
+  {
+    "name": "琥珀",
+    "color": "W",
+    "priority": 203,
+    "category": "额外获得卡牌",
+    "effect": "保留难度比此卡低的所有宝物合成卡",
+    "quantity": 1,
+    "synthesisScore": 1,
+    "difficulty": 9
+  },
+  {
+    "name": "香炉",
+    "color": "W",
+    "priority": 55,
+    "category": "额外获得卡牌",
+    "effect": "首次炸锅时，不会损失宝物",
+    "quantity": 1,
+    "synthesisScore": 4,
+    "difficulty": 5
+  },
+  {
+    "name": "胸针",
+    "color": "Y",
+    "priority": 99,
+    "category": "额外获得卡牌",
+    "effect": "无视颜色和其他卡牌效果影响，可以打开4张风险宝物且最多只能打开4张",
+    "quantity": 1,
+    "synthesisScore": 2,
+    "difficulty": 5
+  },
+  {
+    "name": "珊瑚",
+    "color": "R",
+    "priority": 11,
+    "category": "额外获得卡牌",
+    "effect": "有4种颜色时，额外打开两张安全宝物卡",
+    "quantity": 1,
+    "synthesisScore": 1,
+    "difficulty": 6
+  },
+  {
+    "name": "提灯",
+    "color": "Y",
+    "priority": 12,
+    "category": "额外获得卡牌",
+    "effect": "所有颜色相同时，额外打开两张安全宝物卡",
+    "quantity": 1,
+    "synthesisScore": 2,
+    "difficulty": 9
+  },
+  {
+    "name": "戒指",
+    "color": "W",
+    "priority": 13,
+    "category": "额外加分",
+    "effect": "每有一张基础卡，分值加1",
+    "quantity": 1,
+    "synthesisScore": 3,
+    "difficulty": 6
+  },
+  {
+    "name": "戒指",
+    "color": "Y",
+    "priority": 14,
+    "category": "额外加分",
+    "effect": "每有一张基础卡，分值加1",
+    "quantity": 1,
+    "synthesisScore": 4,
+    "difficulty": 10
+  },
+  {
+    "name": "酒杯",
+    "color": "R",
+    "priority": 15,
+    "category": "额外加分",
+    "effect": "每有一张宝物卡，分值加1",
+    "quantity": 1,
+    "synthesisScore": 2,
+    "difficulty": 5
+  },
+  {
+    "name": "印章",
+    "color": "B",
+    "priority": 16,
+    "category": "额外加分",
+    "effect": "白色的牌的分值加1",
+    "quantity": 2,
+    "synthesisScore": 3,
+    "difficulty": 5
+  },
+  {
+    "name": "印章",
+    "color": "Y",
+    "priority": 17,
+    "category": "额外加分",
+    "effect": "蓝色的牌的分值加1",
+    "quantity": 2,
+    "synthesisScore": 4,
+    "difficulty": 9
+  },
+  {
+    "name": "印章",
+    "color": "R",
+    "priority": 18,
+    "category": "额外加分",
+    "effect": "黄色的牌的分值加1",
+    "quantity": 1,
+    "synthesisScore": 5,
+    "difficulty": 12
+  },
+  {
+    "name": "印章",
+    "color": "W",
+    "priority": 19,
+    "category": "额外加分",
+    "effect": "红色的牌的分值加1",
+    "quantity": 1,
+    "synthesisScore": 6,
+    "difficulty": 14
+  },
+  {
+    "name": "权杖",
+    "color": "W",
+    "priority": 20,
+    "category": "额外加分",
+    "effect": "红色的牌的分值加2",
+    "quantity": 1,
+    "synthesisScore": 3,
+    "difficulty": 9
+  },
+  {
+    "name": "铃铛",
+    "color": "B",
+    "priority": 30,
+    "category": "额外加分",
+    "effect": "使基础分值最高的一张白色卡的基础分值翻倍",
+    "quantity": 1,
+    "synthesisScore": 1,
+    "difficulty": 4
+  },
+  {
+    "name": "铃铛",
+    "color": "Y",
+    "priority": 31,
+    "category": "额外加分",
+    "effect": "使基础分值最高的一张蓝色卡的基础分值翻倍",
+    "quantity": 1,
+    "synthesisScore": 2,
+    "difficulty": 7
+  },
+  {
+    "name": "铃铛",
+    "color": "R",
+    "priority": 32,
+    "category": "额外加分",
+    "effect": "使基础分值最高的一张黄色卡的基础分值翻倍",
+    "quantity": 1,
+    "synthesisScore": 3,
+    "difficulty": 10
+  },
+  {
+    "name": "铃铛",
+    "color": "W",
+    "priority": 33,
+    "category": "额外加分",
+    "effect": "使基础分值最高的一张红色卡的基础分值翻倍",
+    "quantity": 1,
+    "synthesisScore": 4,
+    "difficulty": 13
+  },
+  {
+    "name": "金苹果",
+    "color": "Y",
+    "priority": 25,
+    "category": "额外加分",
+    "effect": "每有一种颜色，分值加1",
+    "quantity": 1,
+    "synthesisScore": 2,
+    "difficulty": 6
+  },
+  {
+    "name": "金苹果",
+    "color": "R",
+    "priority": 26,
+    "category": "额外加分",
+    "effect": "每有一种颜色，分值加1",
+    "quantity": 1,
+    "synthesisScore": 3,
+    "difficulty": 10
+  },
+  {
+    "name": "王冠",
+    "color": "R",
+    "priority": 27,
+    "category": "额外加分",
+    "effect": "最终的总分翻倍",
+    "quantity": 1,
+    "synthesisScore": 0,
+    "difficulty": 15
+  },
+  {
+    "name": "青铜钟",
+    "color": "R",
+    "priority": 28,
+    "category": "额外加分",
+    "effect": "基础分值小于等于2分的卡额外加1",
+    "quantity": 1,
+    "synthesisScore": 2,
+    "difficulty": 6
+  },
+  {
+    "name": "青铜钟",
+    "color": "B",
+    "priority": 29,
+    "category": "额外加分",
+    "effect": "基础分值小于等于1分的卡额外加1",
+    "quantity": 1,
+    "synthesisScore": 3,
+    "difficulty": 6
+  },
+  {
+    "name": "烛台",
+    "color": "R",
+    "priority": 6,
+    "category": "额外加分",
+    "effect": "对于安全宝物，分值加3",
+    "quantity": 1,
+    "synthesisScore": 3,
+    "difficulty": 6
+  },
+  {
+    "name": "保险箱",
+    "color": "Y",
+    "priority": 5,
+    "category": "其他效果",
+    "effect": "必定可以获得第1张宝物卡（无论分值或其他要求）",
+    "quantity": 1,
+    "synthesisScore": 3,
+    "difficulty": 5
+  },
+  {
+    "name": "保险箱",
+    "color": "R",
+    "priority": 5,
+    "category": "其他效果",
+    "effect": "必定可以获得第1张宝物卡（无论分值或其他要求）",
+    "quantity": 1,
+    "synthesisScore": 4,
+    "difficulty": 8
+  },
+  {
+    "name": "珠宝匣",
+    "color": "W",
+    "priority": -4,
+    "category": "其他效果",
+    "effect": "所有牌的颜色视为白色",
+    "quantity": 2,
+    "synthesisScore": 3,
+    "difficulty": 5
+  },
+  {
+    "name": "珠宝匣",
+    "color": "B",
+    "priority": -3,
+    "category": "其他效果",
+    "effect": "所有牌的颜色视为蓝色",
+    "quantity": 1,
+    "synthesisScore": 4,
+    "difficulty": 8
+  },
+  {
+    "name": "珠宝匣",
+    "color": "Y",
+    "priority": -2,
+    "category": "其他效果",
+    "effect": "所有牌的颜色视为黄色",
+    "quantity": 1,
+    "synthesisScore": 5,
+    "difficulty": 12
+  },
+  {
+    "name": "珠宝匣",
+    "color": "R",
+    "priority": -1,
+    "category": "其他效果",
+    "effect": "所有牌的颜色视为红色",
+    "quantity": 1,
+    "synthesisScore": 6,
+    "difficulty": 14
+  },
+  {
+    "name": "雕像",
+    "color": "Y",
+    "priority": -5,
+    "category": "其他效果",
+    "effect": "合成时可以额外增加一张牌",
+    "effectCode": "material-limit",
+    "quantity": 2,
+    "synthesisScore": 2,
+    "difficulty": 4
+  },
+  {
+    "name": "雕像",
+    "color": "R",
+    "priority": -5,
+    "category": "其他效果",
+    "effect": "合成时可以额外增加一张牌",
+    "effectCode": "material-limit",
+    "quantity": 1,
+    "synthesisScore": 3,
+    "difficulty": 7
+  },
+  {
+    "name": "银壶",
+    "color": "R",
+    "priority": 59,
+    "category": "其他效果",
+    "effect": "可以先看到卡面内容，再决定是否打开风险宝物卡",
+    "quantity": 1,
+    "synthesisScore": 3,
+    "difficulty": 4
+  },
+  {
+    "name": "怀表",
+    "color": "Y",
+    "priority": -7,
+    "category": "其他效果",
+    "effect": "所有风险宝物卡均变成安全宝物卡",
+    "quantity": 1,
+    "synthesisScore": 3,
+    "difficulty": 7
+  },
+  {
+    "name": "水晶",
+    "color": "R",
+    "priority": -6,
+    "category": "其他效果",
+    "effect": "此卡视为同时拥有4种颜色",
+    "quantity": 1,
+    "synthesisScore": 5,
+    "difficulty": 7
+  },
+  {
+    "name": "金块",
+    "color": "B",
+    "priority": null,
+    "category": "其他效果",
+    "effect": "无特效",
+    "quantity": 3,
+    "synthesisScore": 4,
+    "difficulty": 5
+  },
+  {
+    "name": "金块",
+    "color": "Y",
+    "priority": null,
+    "category": "其他效果",
+    "effect": "无特效",
+    "quantity": 1,
+    "synthesisScore": 5,
+    "difficulty": 8
+  },
+  {
+    "name": "金块",
+    "color": "R",
+    "priority": null,
+    "category": "其他效果",
+    "effect": "无特效",
+    "quantity": 1,
+    "synthesisScore": 6,
+    "difficulty": 12
+  },
+  {
+    "name": "白玉",
+    "color": "Special",
+    "priority": null,
+    "category": null,
+    "effect": "终局分数加3",
+    "additionalAcquireMethod": "所有的卡都为白色",
+    "additionalAcquireColor": "W",
+    "quantity": 1,
+    "synthesisScore": 0,
+    "difficulty": 16
+  },
+  {
+    "name": "蓝宝石",
+    "color": "Special",
+    "priority": null,
+    "category": null,
+    "effect": "终局分数加3",
+    "additionalAcquireMethod": "所有的卡都为蓝色",
+    "additionalAcquireColor": "B",
+    "quantity": 1,
+    "synthesisScore": 0,
+    "difficulty": 16
+  },
+  {
+    "name": "黄宝石",
+    "color": "Special",
+    "priority": null,
+    "category": null,
+    "effect": "终局分数加3",
+    "additionalAcquireMethod": "所有的卡都为黄色",
+    "additionalAcquireColor": "Y",
+    "quantity": 1,
+    "synthesisScore": 0,
+    "difficulty": 16
+  },
+  {
+    "name": "红宝石",
+    "color": "Special",
+    "priority": null,
+    "category": null,
+    "effect": "终局分数加3",
+    "additionalAcquireMethod": "所有的卡都为红色",
+    "additionalAcquireColor": "R",
+    "quantity": 1,
+    "synthesisScore": 0,
+    "difficulty": 16
+  },
+  {
+    "name": "印玺",
+    "color": "Special",
+    "priority": null,
+    "category": null,
+    "effect": "终局分数加4",
+    "quantity": 1,
+    "synthesisScore": 0,
+    "difficulty": 18
+  },
+  {
+    "name": "王冠",
+    "color": "Special",
+    "priority": null,
+    "category": null,
+    "effect": "终局分数加4",
+    "quantity": 1,
+    "synthesisScore": 0,
+    "difficulty": 18
+  },
+  {
+    "name": "金玫瑰",
+    "color": "Special",
+    "priority": null,
+    "category": null,
+    "effect": "终局分数加4",
+    "quantity": 1,
+    "synthesisScore": 0,
+    "difficulty": 18
+  },
+  {
+    "name": "金杯",
+    "color": "Special",
+    "priority": null,
+    "category": null,
+    "effect": "终局分数加5",
+    "quantity": 1,
+    "synthesisScore": 0,
+    "difficulty": 20
+  }
+]

@@ -1,0 +1,10 @@
+推荐技术栈
+Vite + React + TypeScript：主应用和卡牌界面
+纯 TypeScript game-core：不依赖 React、DOM 或动画
+Zustand：连接规则状态与界面，避免把规则写进组件
+Zod：校验从 CardData.xlsm 导出的卡牌 JSON
+Vitest + fast-check：单元测试和规则不变量测试
+Playwright：完整回合与移动端交互测试
+IndexedDB：自动存档、继续游戏和战局回放
+种子随机数库：保证同一 seed 可以复现整局游戏
+CSS/Web Animations 或 Motion：洗牌、翻牌、入手和炸锅动画
