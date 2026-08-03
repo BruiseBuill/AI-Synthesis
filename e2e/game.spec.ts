@@ -181,6 +181,10 @@ test("settings includes a concise basic rulebook", async ({ page }) => {
   await expect(rulebook).toBeVisible();
   await expect(rulebook.getByText("选择材料", { exact: true })).toBeVisible();
   await expect(rulebook.getByText("获取与炸锅", { exact: true })).toBeVisible();
+  await expect(rulebook.getByText("翻开宝物", { exact: true }).locator("..").getByRole("paragraph"))
+    .toContainText("安全宝物数量等于合成卡的数量减去颜色数，风险宝物的数量等于颜色数。");
+  await expect(rulebook.getByText("获取与炸锅", { exact: true }).locator("..").getByRole("paragraph"))
+    .toContainText("第 1 次炸锅会导致上一个获取成功的宝物损毁，第 2 次炸锅会导致所有获取成功的宝物损毁并立即结束本次合成。");
   await expect(rulebook.getByText("阶段与终局", { exact: true }).locator("..").getByRole("paragraph"))
     .toContainText("第三次遇到阶段提示时牌局结束并展示终局分数。");
   await expect(rulebook.locator("li")).toHaveCount(6);
